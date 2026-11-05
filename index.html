@@ -146,6 +146,7 @@ footer{color:var(--muted);font-size:13px;max-width:860px;margin:0 auto;padding:0
 .toast[hidden]{display:none}
 .banner{background:var(--soft);border-radius:8px;padding:8px 12px;font-size:14px;margin:0 0 14px}
 .banner[hidden]{display:none}
+.stop .acts a.bk{font-size:13px;font-weight:700;color:var(--sun);text-decoration:none;white-space:nowrap}
 
 @media (min-width:1000px){
   body{display:grid;grid-template-columns:minmax(440px,52%) minmax(0,1fr);align-items:start}
@@ -219,6 +220,18 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){retur
 var P={};S.places.forEach(function(p){P[p.id]=p;});
 var D={};S.days.forEach(function(d){D[d.id]=d;});
 var HOME=P.airbnb;
+var BOOK={
+fiacre:{tel:"+33450733046"},zeph:{tel:"+33450732415"},renard:{tel:"+33450732620"},belle:{tel:"+33642108491"},
+bistrom:{tel:"+33450732083"},cheminee:{tel:"+33450173625"},escale:{tel:"+33450736438"},crepy:{tel:"+33450733119"},
+folie:{tel:"+33686963254"},fermepistes:{tel:"+33450813581"},panoramique:{tel:"+41794722679"},mamos:{tel:"+33450742068"},
+petitlindaret:{tel:"+33450742169"},corbeau:{tel:"+41794173750"},bourri:{tel:"+41797573255"},tseudron:{tel:"+41792125671"},
+fantasticable:{url:"https://www.skipass-chatel.com/en/forfaits-fantasticable"},tinderets:{tel:"+33450733192",who:"ESI Pro Skiing"}};
+var BOOKNAME={};Object.keys(BOOK).forEach(function(k){var p=P[k];if(p)BOOKNAME[p.name.toLowerCase()]=BOOK[k];});
+function bookFor(it){var m=/^s-(?:idea|thu|fri|sat|sun|mon)-(.+)$/.exec(it.id);var b=(m&&BOOK[m[1]])||BOOKNAME[String(it.name||"").toLowerCase()];return b||null;}
+function fmtTel(n){return n.indexOf("+33")===0?"0"+n.slice(3).replace(/(\d)(?=(\d{2})+$)/g,"$1 "):n.replace(/^\+41(\d{2})(\d{3})(\d{2})(\d{2})$/,"+41 $1 $2 $3 $4");}
+function bookLink(it,cls){var b=bookFor(it);if(!b)return "";
+  if(b.url)return '<a class="'+cls+'" href="'+esc(b.url)+'" target="_blank" rel="noopener">Book online</a>';
+  return '<a class="'+cls+'" href="tel:'+esc(b.tel)+'" title="Call '+esc(b.who||it.name)+' to book">Call to book</a>';}
 function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
 function placeUrl(p){if(p.cid)return "https://maps.google.com/?cid="+p.cid;if(p.pid)return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(p.name+" Châtel")+"&query_place_id="+p.pid;return "";}
 function mapsUrl(it){if(it.url)return it.url;if(it.lat!=null&&it.lat!=="")return "https://www.google.com/maps/search/?api=1&query="+it.lat+","+it.lon;return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(it.name+" Châtel");}
@@ -304,6 +317,7 @@ function popup(it){
   if(it.by)h+='<p>Added by '+esc(it.by)+'</p>';
   h+='<div class="lk"><a href="'+esc(mapsUrl(it))+'" target="_blank" rel="noopener">Open link</a>';
   if(hasPos(it))h+='<a href="'+esc(walkUrl(it))+'" target="_blank" rel="noopener">Walk from Airbnb</a>';
+  var bk=bookFor(it);if(bk)h+=bk.url?'<a href="'+esc(bk.url)+'" target="_blank" rel="noopener">Book online</a>':'<a href="tel:'+esc(bk.tel)+'">Call to book: '+esc(fmtTel(bk.tel))+'</a>';
   h+='<button type="button" data-goto="'+esc(it.id)+'">'+(u.length?'See in itinerary':'See in ideas')+'</button>';
   return h+'</div></div>';
 }
@@ -358,7 +372,7 @@ function rowHtml(it,n,day){
     '<span class="nm">'+esc(it.name)+'</span>'+
     (it.note?'<span class="nt" style="color:var(--ink);font-weight:500">'+esc(it.note)+'</span>':'')+(it.info?'<span class="nt">'+esc(String(it.info))+'</span>':'')+
     (hasPos(it)?'':'<span class="nt">No map location yet</span>')+'</span><span></span></button>'+
-    '<div class="acts"><span data-act="map">Map</span>'+(LIVE?'<span data-act="edit">Edit</span>':'')+'</div></div>'+
+    '<div class="acts"><span data-act="map">Map</span>'+(LIVE?'<span data-act="edit">Edit</span>':'')+bookLink(it,"bk")+'</div></div>'+
     (st.editing===it.id?editorHtml(it):'')+'</div></li>';
 }
 function slotOptions(cur){return SLOTS.map(function(s){return '<option'+(s===cur?' selected':'')+'>'+s+'</option>';}).join("");}
