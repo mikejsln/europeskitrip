@@ -3,373 +3,489 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Châtel ski plan · Jan 14–19, 2027</title>
+<title>Ski week in Châtel · Jan 14–19, 2027</title>
+<meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<style id="css">
+<style>
 :root{
-  --bg:#EDF2F6;--surface:#FFFFFF;--ink:#18293A;--muted:#55687A;--line:#C9D5DF;
-  --terrain:#DCE6EE;--ridge:#AFC1D0;--road:#C3D1DC;
-  --thu:#4D6B7F;--fri:#2366C9;--sat:#24805A;--sun:#6A4CB4;--mon:#D2352B;
-  --c-stay:#E0A400;--c-lift:#18293A;--c-grocery:#2A9D8F;--c-bakery:#B7791F;--c-dinner:#C2410C;
-  --c-lunch:#7C3AED;--c-bar:#BE185D;--c-activity:#0E7490;--c-rental:#64748B;--c-custom:#0F766E;
-  --warn-bg:#FCECEA;--note-bg:#EAF1FB;--onaccent:#FFFFFF;
+  --rausch:#FF385C;--rausch-d:#E00B41;--ink:#222222;--muted:#6A6A6A;--line:#DDDDDD;--soft:#F7F7F7;--bg:#FFFFFF;--card:#FFFFFF;
+  --shadow:0 6px 16px rgba(0,0,0,.12);--shadow-sm:0 1px 2px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.05);
+  --t-stay:#FFE4E9;--t-lift:#E3EAF3;--t-grocery:#E2F4F0;--t-bakery:#FBEFD9;--t-dinner:#FDE6DA;--t-lunch:#EDE7FB;--t-bar:#FBE3EF;--t-activity:#DFF1F7;--t-rental:#ECEEF1;--t-custom:#E2F4F0;
+  --i-stay:#E00B41;--i-lift:#2B4A6F;--i-grocery:#1F7A6B;--i-bakery:#A3661A;--i-dinner:#C2410C;--i-lunch:#6D3FD8;--i-bar:#B5175B;--i-activity:#0E7490;--i-rental:#525C6B;--i-custom:#1F7A6B;
   color-scheme:light;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0F1A26;--surface:#172534;--ink:#E5EDF4;--muted:#9AAFC2;--line:#2B3D50;
-    --terrain:#1B2C3D;--ridge:#3A536B;--road:#2C4258;
-    --thu:#8AA6BA;--fri:#5B95E8;--sat:#4BB487;--sun:#9B82E0;--mon:#F0685E;
-    --c-stay:#F5C542;--c-lift:#E5EDF4;--c-grocery:#4FD1C5;--c-bakery:#E0A458;--c-dinner:#F97316;
-    --c-lunch:#A78BFA;--c-bar:#F472B6;--c-activity:#38BDF8;--c-rental:#94A3B8;--c-custom:#2DD4BF;
-    --warn-bg:#3A1F22;--note-bg:#1C2E44;--onaccent:#0F1A26;
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0F1A26;--surface:#172534;--ink:#E5EDF4;--muted:#9AAFC2;--line:#2B3D50;
-  --terrain:#1B2C3D;--ridge:#3A536B;--road:#2C4258;
-  --thu:#8AA6BA;--fri:#5B95E8;--sat:#4BB487;--sun:#9B82E0;--mon:#F0685E;
-  --c-stay:#F5C542;--c-lift:#E5EDF4;--c-grocery:#4FD1C5;--c-bakery:#E0A458;--c-dinner:#F97316;
-  --c-lunch:#A78BFA;--c-bar:#F472B6;--c-activity:#38BDF8;--c-rental:#94A3B8;--c-custom:#2DD4BF;
-  --warn-bg:#3A1F22;--note-bg:#1C2E44;--onaccent:#0F1A26;
-  color-scheme:dark;
-}
+@media (prefers-color-scheme:dark){:root{
+  --ink:#F2F2F2;--muted:#A9A9A9;--line:#3A3A3A;--soft:#1E1E1E;--bg:#121212;--card:#1A1A1A;
+  --shadow:0 6px 16px rgba(0,0,0,.5);--shadow-sm:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.3);
+  --t-stay:#3A1820;--t-lift:#1E2A38;--t-grocery:#16302B;--t-bakery:#33281A;--t-dinner:#36221A;--t-lunch:#28213D;--t-bar:#361B29;--t-activity:#16303A;--t-rental:#25282D;--t-custom:#16302B;
+  --i-stay:#FF6B85;--i-lift:#9DB9DD;--i-grocery:#5ED1BD;--i-bakery:#E8B064;--i-dinner:#FF9466;--i-lunch:#B79BFF;--i-bar:#FF84B8;--i-activity:#5CC8E6;--i-rental:#B4BDC9;--i-custom:#5ED1BD;
+  color-scheme:dark;}
+  :root .lcard .ph{background-image:radial-gradient(circle at 70% 20%,rgba(255,255,255,.12),rgba(255,255,255,0) 60%)!important}}
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:calc(90px + env(safe-area-inset-top,0px));scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 *,*::before,*::after{box-sizing:inherit}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.5}
-a{color:var(--fri)}
-button,select,input{font:inherit;color:inherit}
-:focus-visible{outline:3px solid var(--fri);outline-offset:2px}
-.wrap{max-width:1100px;margin:0 auto;padding:24px 16px 120px}
-h1,h2,h3{font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif;font-weight:700;line-height:1.05;margin:0}
-h1{font-size:clamp(2.6rem,9vw,4.2rem)}
-h2{font-size:1.85rem;margin:40px 0 12px}
-h3{font-size:1.35rem}
-.sub{color:var(--muted);margin:8px 0 0;max-width:62ch}
-.toprow{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
-.btn{border:1.5px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 14px;font-weight:600;cursor:pointer}
-.btn.primary{background:var(--fri);border-color:var(--fri);color:var(--onaccent)}
-.btn.small{padding:3px 10px;font-size:.9rem}
-.btn[hidden]{display:none}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:2px solid var(--c,var(--line));background:transparent;border-radius:999px;padding:5px 12px;font-weight:600;font-size:.95rem;cursor:pointer;color:var(--ink)}
-.chip[aria-pressed="true"]{background:var(--c,var(--ink));color:var(--onaccent)}
-.chip .dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:0}
-.chip[aria-pressed="true"] .dot{background:var(--onaccent)}
-.layout{display:grid;gap:18px;margin-top:18px}
-@media (min-width:900px){.layout{grid-template-columns:440px 1fr;align-items:start}.mapcol{position:sticky;top:12px}}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
-.tabs{display:flex;gap:6px;margin-bottom:8px}
-.tab{flex:1;border:1.5px solid var(--line);background:transparent;border-radius:8px;padding:6px;font-weight:600;cursor:pointer}
-.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:6px}
+svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+@media (max-width:743px){.container{padding:0 20px}}
 
-#map.picking svg{cursor:crosshair}
-.pin{cursor:pointer}
-.pin circle{stroke:var(--surface);stroke-width:2}
-.pin.sel circle{stroke:var(--ink);stroke-width:3}
-.pin.faded{opacity:.25}
-.lbl{font:600 12px "Barlow",system-ui,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--terrain);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
-.lbl.sm{font-weight:500;font-size:11px;fill:var(--muted)}
-.route{fill:none;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 0}
-.route.faint{opacity:.25}
-.walk{fill:none;stroke-width:3.5;stroke-dasharray:2 6;stroke-linecap:round}
-.maphint{color:var(--muted);font-size:.88rem;margin:6px 4px 0}
-#legend{margin-top:8px}
-#info{margin-top:10px}
-#info:empty{display:none}
-.info{border-left:5px solid var(--c);padding:8px 12px;background:var(--note-bg);border-radius:8px}
-.info h3{font-size:1.2rem}
-.info p{margin:4px 0}
-.meta{color:var(--muted);font-size:.92rem}
-.linkrow{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:4px;font-size:.95rem}
-.addrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
-.addrow select,.addrow input{border:1.5px solid var(--line);border-radius:6px;padding:4px 6px;background:var(--surface);max-width:100%}
-.how{display:grid;gap:10px}
-@media (min-width:720px){.how{grid-template-columns:1fr 1fr}}
-.how .card p{margin:6px 0 0}
-.day{border-left:6px solid var(--c);margin-bottom:14px}
-.day header{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
-.date{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;font-size:1.1rem;color:var(--c)}
-.pass{display:inline-block;font-size:.85rem;font-weight:600;border:1.5px solid var(--c);color:var(--c);border-radius:6px;padding:0 8px;margin-top:4px}
-.day ol{margin:8px 0 0;padding-left:1.2em}
-.day li{margin:3px 0}
-.getthere{background:var(--note-bg);border-radius:8px;padding:8px 12px;margin-top:10px}
-.getthere b{display:block;font-size:.9rem;color:var(--muted)}
-.cutoff{background:var(--warn-bg);border-radius:8px;padding:8px 12px;margin-top:8px}
-.stops{margin-top:12px;border-top:1px solid var(--line);padding-top:8px}
-.stop{display:grid;grid-template-columns:86px 1fr auto;gap:8px;align-items:start;padding:5px 0}
-.slot{font-size:.85rem;font-weight:600;color:var(--muted);padding-top:2px}
-.stop .nm{background:none;border:0;padding:0;font-weight:600;text-align:left;cursor:pointer;color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
-.stop .nt{color:var(--muted);font-size:.92rem}
-.sw{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:var(--c)}
-.empty{color:var(--muted);font-size:.95rem}
-.places{display:grid;gap:8px}
-.prow{display:grid;grid-template-columns:1fr auto;gap:6px;padding:8px 0;border-bottom:1px solid var(--line)}
-.prow:last-child{border-bottom:0}
-.prow .nm{font-weight:600;background:none;border:0;padding:0;text-align:left;cursor:pointer;color:var(--ink)}
-.prow p{margin:2px 0 0;font-size:.94rem;color:var(--muted)}
-.group h3{margin:16px 0 4px;font-size:1.2rem}
-form.addplace{display:grid;gap:8px}
-form.addplace label{display:grid;gap:2px;font-size:.9rem;font-weight:600}
-form.addplace input,form.addplace select{border:1.5px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--surface)}
-.editbar{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;z-index:20}
-.editbar[hidden]{display:none}
-.msg{font-weight:500}
-.banner{background:var(--note-bg);border-radius:10px;padding:10px 14px;margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.banner[hidden]{display:none}
-.edit-only{display:none}
-body.editing .edit-only{display:revert}
-footer{color:var(--muted);font-size:.9rem;margin-top:36px}
-.tablewrap{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:.96rem}
-th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-size:1.05rem}
+/* header */
+.top{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:60}
+.top .container{display:flex;align-items:center;justify-content:space-between;gap:16px;height:80px}
+.brand{display:flex;align-items:center;gap:8px;color:var(--rausch);font-weight:800;font-size:21px;letter-spacing:-.02em;text-decoration:none}
+.brand svg{width:32px;height:32px}
+.searchpill{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow-sm);padding:6px 6px 6px 22px;gap:0;background:var(--card);text-decoration:none}
+.searchpill span{font-weight:600;font-size:14px;padding:0 14px;white-space:nowrap}
+.searchpill span+span{border-left:1px solid var(--line)}
+.searchpill span.m{color:var(--muted);font-weight:400}
+.searchpill i{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--rausch);color:#fff;margin-left:4px}
+.searchpill i svg{width:16px;height:16px;stroke-width:2.6}
+.avatars{display:flex}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;border:2px solid var(--bg);margin-left:-8px}
+.av:first-child{margin-left:0}
+@media (max-width:743px){.brand span{display:none}.avatars{display:none}.searchpill{flex:1;justify-content:space-between}.searchpill span{padding:0 8px;font-size:13px}.searchpill span.m{display:none}}
 
-#map{height:520px;border-radius:10px;overflow:hidden;z-index:0}
-@media (max-width:899px){#map{height:62vh;min-height:360px}}
-.leaflet-container{font-family:"Barlow",system-ui,sans-serif;font-size:14px;background:var(--terrain)}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--surface);color:var(--ink)}
-.leaflet-popup-content{margin:12px 14px;line-height:1.4}
-.pop{display:grid;gap:4px}.pop .pt{font-size:1.05rem}
-.leaflet-control-layers{background:var(--surface);color:var(--ink)}
-.tip{font-weight:600;font-size:12px;padding:1px 6px}
-.home-pin span{display:block;background:var(--c-stay);color:#18293A;font-weight:700;font-size:12px;text-align:center;line-height:22px;border:2px solid #fff;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,.35)}
+/* title + hero */
+.titlebar{padding-top:24px}
+h1{font-size:26px;font-weight:600;line-height:1.25;margin:0;letter-spacing:-.01em}
+.subrow{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:6px;font-size:14px}
+.subrow .loc{font-weight:600}
+.subrow .loc a{text-decoration:underline}
+.ghost{display:inline-flex;align-items:center;gap:8px;background:none;border:0;padding:8px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:underline}
+.ghost:hover{background:var(--soft)}
+.ghost svg{width:16px;height:16px}
+.hero{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:200px 200px;gap:8px;margin-top:24px;border-radius:12px;overflow:hidden}
+.tile{position:relative;border:0;padding:0;overflow:hidden;background:var(--soft);text-align:left;color:#fff}
+.tile svg{position:absolute;inset:0;width:100%;height:100%;transition:transform .4s}
+.tile:hover svg{transform:scale(1.03)}
+.tile:hover::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.08)}
+.tile::before{content:"";position:absolute;inset:auto 0 0 0;height:60%;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0));z-index:1}
+.tile .cap{position:absolute;left:14px;right:14px;bottom:12px;z-index:2;text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.tile .cap b{display:block;font-size:15px}
+.tile .cap small{font-size:13px;opacity:.95}
+.tile.big{grid-row:1/3}
+.tile.big .cap b{font-size:22px}
+@media (max-width:743px){.hero{grid-template-columns:1fr 1fr;grid-template-rows:240px 130px 130px;margin-left:-20px;margin-right:-20px;border-radius:0}.tile.big{grid-column:1/3;grid-row:auto}}
+
+/* body layout */
+.main{display:grid;grid-template-columns:minmax(0,1fr) 370px;gap:80px;margin-top:32px}
+@media (max-width:949px){.main{grid-template-columns:1fr;gap:0}}
+.section{padding:32px 0;border-bottom:1px solid var(--line)}
+.section:first-child{padding-top:0}
+h2{font-size:22px;font-weight:600;margin:0 0 6px;letter-spacing:-.01em}
+.lead{color:var(--muted);margin:0 0 20px;font-size:15px}
+.hosthead{display:flex;justify-content:space-between;gap:16px;align-items:center}
+.hosthead h2{margin:0}
+.hosthead p{margin:4px 0 0;color:var(--ink)}
+.bigav{width:56px;height:56px;border-radius:50%;background:#222;color:#fff;display:grid;place-items:center;font-weight:700;font-size:22px;flex:none;position:relative}
+.bigav .badge{position:absolute;right:-4px;bottom:-2px;width:22px;height:22px;border-radius:50%;background:var(--rausch);display:grid;place-items:center;border:2px solid var(--bg)}
+.bigav .badge svg{width:12px;height:12px;stroke:#fff;stroke-width:3}
+.feat{display:grid;gap:24px}
+.feat div{display:grid;grid-template-columns:32px 1fr;gap:20px;align-items:start}
+.feat b{display:block;font-weight:600}
+.feat span{color:var(--muted);font-size:14px}
+
+/* tab bars */
+.tabbar{display:flex;gap:28px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);margin-bottom:20px}
+.tabbar::-webkit-scrollbar{display:none}
+.tabbar button{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:4px 0 12px;color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;opacity:.85}
+.tabbar button:hover{color:var(--ink);border-bottom-color:var(--line);opacity:1}
+.tabbar button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink);opacity:1}
+
+/* day cards */
+.day{padding:4px 0 28px}
+.day+.day{border-top:1px solid var(--line);padding-top:28px}
+.dayhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.kicker{font-size:13px;color:var(--muted);font-weight:500}
+.day h3{font-size:20px;font-weight:600;margin:2px 0 0}
+.passchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600;white-space:nowrap}
+.passchip.pds{border-color:var(--rausch);color:var(--rausch)}
+.how{display:grid;grid-template-columns:24px 1fr;gap:14px;margin-top:16px;align-items:start}
+.how b{display:block;font-weight:600;font-size:15px}
+.how span{color:var(--muted);font-size:14px}
+.steps{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:8px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:24px 1fr;gap:14px;font-size:15px;counter-increment:s}
+.steps li::before{content:counter(s);width:22px;height:22px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--muted)}
+.heads{display:flex;gap:12px;align-items:flex-start;background:var(--soft);border-radius:12px;padding:14px 16px;margin-top:16px;font-size:14px}
+.heads svg{color:var(--rausch);width:20px;height:20px}
+.stops{margin-top:16px;display:grid;gap:4px}
+.stop{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;padding:8px;margin:0 -8px;border-radius:12px;background:none;border:0;text-align:left;width:calc(100% + 16px)}
+.stop:hover{background:var(--soft)}
+.thumb{width:56px;height:56px;border-radius:10px;display:grid;place-items:center}
+.stop b{display:block;font-weight:600;font-size:15px}
+.stop small{color:var(--muted);font-size:13px}
+.stop .chev{color:var(--muted)}
+.stop .chev svg{width:18px;height:18px}
+
+/* listing cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:28px 18px;align-items:start}
+.lcard{background:none;border:0;padding:0;text-align:left;display:block;width:100%}
+.lcard .ph{position:relative;aspect-ratio:20/19;border-radius:12px;display:grid;place-items:center;overflow:hidden;background-image:radial-gradient(circle at 70% 20%,rgba(255,255,255,.55),rgba(255,255,255,0) 60%)!important}
+.lcard .ph .disc{width:76px;height:76px;border-radius:50%;background:var(--card);display:grid;place-items:center;box-shadow:var(--shadow-sm)}
+.lcard .ph svg.big{width:36px;height:36px;stroke-width:1.6}
+.lcard .ph .pill{position:absolute;top:12px;left:12px;background:var(--card);color:var(--ink);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;box-shadow:var(--shadow-sm)}
+.lcard .ph .dist{position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,.55);color:#fff;border-radius:6px;padding:2px 8px;font-size:12px;font-weight:600}
+.lcard h4{margin:10px 0 0;font-size:15px;font-weight:600;line-height:1.3}
+.lcard p{margin:2px 0 0;color:var(--muted);font-size:14px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lcard .hrs{font-size:13px;margin-top:4px;color:var(--ink)}
+.lcard:hover h4{text-decoration:underline}
+
+/* booking card */
+.side{position:relative}
+.book{position:sticky;top:104px;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:24px;background:var(--card)}
+@media (max-width:949px){.side{display:none}}
+.book .price{font-size:22px;font-weight:600}
+.book .price small{font-size:15px;font-weight:400;color:var(--muted)}
+.box{border:1px solid #B0B0B0;border-radius:8px;margin-top:20px;overflow:hidden}
+.box .r{display:grid;grid-template-columns:1fr 1fr}
+.box .c{padding:10px 12px}
+.box .c+.c{border-left:1px solid #B0B0B0}
+.box .r+.r,.box>.c{border-top:1px solid #B0B0B0}
+.box label{display:block;font-size:10px;font-weight:800;letter-spacing:.04em}
+.box div div{font-size:14px}
+.cta{display:block;width:100%;margin-top:16px;border:0;border-radius:8px;padding:14px;font-weight:600;font-size:16px;color:#fff;text-align:center;text-decoration:none;background:linear-gradient(to right,#E61E4D 0%,#E31C5F 50%,#D70466 100%)}
+.cta:hover{background:linear-gradient(to right,#D70466,#BD1E59)}
+.note{text-align:center;font-size:14px;color:var(--muted);margin:12px 0 0}
+.lines{margin-top:20px;display:grid;gap:12px;font-size:15px}
+.lines div{display:flex;justify-content:space-between;gap:12px}
+.lines div span:first-child{text-decoration:underline}
+.lines .tot{border-top:1px solid var(--line);padding-top:16px;font-weight:600}
+.lines .tot span:first-child{text-decoration:none}
+
+/* map */
+#map{height:480px;border-radius:12px;z-index:0}
+@media (max-width:743px){#map{height:420px}}
+.mapnote{font-size:14px;color:var(--muted);margin:12px 0 0}
+.leaflet-container{font-family:inherit;background:var(--soft)}
+.leaflet-popup-content-wrapper{border-radius:12px;box-shadow:var(--shadow);background:var(--card);color:var(--ink);padding:0;overflow:hidden}
+.leaflet-popup-tip{background:var(--card)}
+.leaflet-popup-content{margin:0;width:260px!important}
+.pop .ph{height:90px;display:grid;place-items:center}
+.pop .ph svg{width:40px;height:40px;stroke-width:1.5}
+.pop .bd{padding:12px 14px 14px;font-size:14px;line-height:1.4}
+.pop h4{margin:0;font-size:15px;font-weight:600}
+.pop p{margin:4px 0 0;color:var(--muted)}
+.pop .links{display:flex;gap:14px;margin-top:8px;font-weight:600}
+.pop .links a{color:var(--ink)}
+.leaflet-container a.leaflet-popup-close-button{width:28px;height:28px;top:8px;right:8px;background:var(--card);border-radius:50%;color:var(--ink);font:400 18px/28px inherit;box-shadow:var(--shadow-sm)}
+.mk{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--card);color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.25);border:1px solid rgba(0,0,0,.06);transition:transform .15s}
+.mk svg{width:16px;height:16px;stroke-width:2}
+.mk:hover{transform:scale(1.1)}
+.mk.on{background:var(--ink);color:var(--bg)}
+.mk.dim{opacity:.45}
+.mk.lift{background:#2B4A6F;color:#fff}
+.mk.home{width:40px;height:40px;background:var(--rausch);color:#fff;border:3px solid #fff}
+.mk.home svg{width:20px;height:20px}
+.lbl{background:var(--card);color:var(--ink);border:0;border-radius:999px;padding:4px 10px;font-weight:700;font-size:12px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.lbl::before{display:none}
+.leaflet-control-layers,.leaflet-bar a{background:var(--card);color:var(--ink)}
+.leaflet-bar{border-radius:8px!important;overflow:hidden;box-shadow:var(--shadow-sm)!important;border:0!important}
+
+/* things to know */
+.know{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+@media (max-width:743px){.know{grid-template-columns:1fr;gap:28px}}
+.know h3{font-size:16px;font-weight:600;margin:0 0 12px}
+.know ul{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:15px}
+.know li small{display:block;color:var(--muted);font-size:13px}
+.know a{font-weight:600;text-decoration:underline}
+
+footer{background:var(--soft);border-top:1px solid var(--line);margin-top:48px;padding:32px 0 calc(110px + env(safe-area-inset-bottom,0px));font-size:14px;color:var(--muted)}
+footer b{color:var(--ink)}
+@media (min-width:950px){footer{padding-bottom:40px}}
+
+/* mobile reserve bar */
+.mbar{display:none}
+@media (max-width:949px){.mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--bg);border-top:1px solid var(--line);padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));align-items:center;justify-content:space-between;gap:12px}
+.mbar b{display:block;font-size:15px}.mbar small{color:var(--muted);text-decoration:underline;font-size:13px}.mbar .cta{width:auto;margin:0;padding:12px 20px}}
 </style>
 </head>
 <body>
-<div id="shell">
-<div class="wrap">
-  <div class="toprow">
-    <div>
-      <h1>Châtel, Jan 14–19</h1>
-      <p class="sub">Joe, Tom and Mike. Four ski days from a garden-level apartment on Route de la Béchigne. Pick a day to see the route, where we eat, and how we get to the lifts.</p>
+<header class="top">
+  <div class="container">
+    <a class="brand" href="#top" aria-label="Ski week in Châtel"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 27 12 9l5 8 4-6 9 16Z" fill="currentColor"/><path d="m12 9 2.9 5.2-2.9-1.5-2.4 1.6Z" fill="#fff"/></svg><span>skiweek</span></a>
+    <a class="searchpill" href="#itinerary"><span>Châtel, France</span><span>Jan 14 – 19</span><span class="m">3 skiers</span><i aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></i></a>
+    <div class="avatars" aria-label="Joe, Tom and Mike"><span class="av" style="background:#222">J</span><span class="av" style="background:#E00B41">T</span><span class="av" style="background:#6D3FD8">M</span></div>
+  </div>
+</header>
+
+<main id="top" class="container">
+  <div class="titlebar">
+    <h1>Ski week in Châtel, French Alps</h1>
+    <div class="subrow">
+      <div class="loc">Espace Liberté + one Avoriaz day · <a href="#where">Châtel, Haute-Savoie, France</a></div>
+      <button class="ghost" id="copyBtn" type="button"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span>Share</span></button>
     </div>
   </div>
+  <div class="hero" id="hero"></div>
 
-  <div class="layout">
-    <div class="mapcol">
-      <div class="card">
-        <div class="tabs" role="tablist" aria-label="Map view">
-          <button class="tab" role="tab" data-view="village" aria-selected="true">Village</button>
-          <button class="tab" role="tab" data-view="area" aria-selected="false">Ski area</button>
+  <div class="main">
+    <div>
+      <section class="section">
+        <div class="hosthead">
+          <div>
+            <h2>Garden-level apartment in Châtel, organized by Joe</h2>
+            <p>3 skiers · 5 nights · 4 ski days · 1 Avoriaz day</p>
+          </div>
+          <div class="bigav" aria-hidden="true">J<span class="badge"><svg class="i" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg></span></div>
         </div>
-        <div id="map"></div>
-        <p class="maphint">Tap a pin for details. Use the layer button (top right) for a topographic map or to hide the ski-run overlay. Dashed day lines connect stops; they aren’t exact ski routes.</p>
-        <div class="chips" id="legend" aria-label="Show categories"></div>
-        <div id="info" aria-live="polite"></div>
+      </section>
+      <section class="section">
+        <div class="feat">
+          <div><svg class="i" viewBox="0 0 24 24"><path d="M13 4a1.5 1.5 0 1 0 0 .01M10 21l2-6 3 3v3M9 11l3-3 3 3 3 1M12 8l-2 5"/></svg><p style="margin:0"><b>Walk to the gondola</b><span>The Super-Châtel gondola is about 650 m from the apartment.</span></p></div>
+          <div><svg class="i" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 18v3M16 18v3M8 14.5h.01M16 14.5h.01"/></svg><p style="margin:0"><b>Free ski shuttle nearby</b><span>Line 3 stops at Béchigne and ran to the Linga lifts every 15 minutes last season.</span></p></div>
+          <div><svg class="i" viewBox="0 0 24 24"><path d="M12 3c3 4 6 6 6 10a6 6 0 0 1-12 0c0-4 3-6 6-10Z"/><path d="M12 13v4"/></svg><p style="margin:0"><b>Joe and Tom know the place</b><span>They skied Châtel last year and booked the same transfer, pass and rental companies.</span></p></div>
+        </div>
+      </section>
+
+      <section class="section" id="itinerary">
+        <h2>Your itinerary</h2>
+        <p class="lead">Pick a day to see the plan and zoom the map.</p>
+        <div class="tabbar" id="dayTabs" role="tablist" aria-label="Days"></div>
+        <div id="days"></div>
+      </section>
+
+      <section class="section" id="places">
+        <h2>Where we’ll eat, shop and après</h2>
+        <p class="lead">Researched from traveler reviews. Tap any place to find it on the map.</p>
+        <div class="tabbar" id="catTabs" role="tablist" aria-label="Categories"></div>
+        <div class="grid" id="grid"></div>
+      </section>
+    </div>
+
+    <aside class="side" aria-label="Trip summary">
+      <div class="book">
+        <div class="price">4 ski days <small>· 5 nights</small></div>
+        <div class="box">
+          <div class="r"><div class="c"><label>ARRIVE</label><div>Thu, Jan 14</div></div><div class="c"><label>DEPART</label><div>Tue, Jan 19</div></div></div>
+          <div class="c"><label>SKIERS</label><div>Joe, Tom, Mike</div></div>
+        </div>
+        <a class="cta" href="https://www.skipass-chatel.com/en/tarifs-hiver" target="_blank" rel="noopener">Buy lift passes</a>
+        <p class="note">Mike and Tom still need passes</p>
+        <div class="lines">
+          <div><span>Espace Liberté pass</span><span>Fri–Sun</span></div>
+          <div><span>Portes du Soleil pass</span><span>Mon</span></div>
+          <div><span>Van from Geneva</span><span>Thu 3:40 PM</span></div>
+          <div><span>Van to Geneva (Mike)</span><span>Tue 5:05 AM</span></div>
+          <div class="tot"><span>Raclette nights</span><span>At least 1</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <section class="section" id="where">
+    <h2>Where you’ll be</h2>
+    <p class="lead" id="mapLead">Châtel, Haute-Savoie, France. Ski runs and lifts are overlaid on the map.</p>
+    <div id="map" aria-label="Map of the trip"></div>
+    <p class="mapnote">Dashed lines connect each day’s stops; they aren’t exact ski routes. Use the layer button for a topographic map.</p>
+  </section>
+
+  <section class="section" style="border-bottom:0">
+    <h2>Things to know</h2>
+    <div class="know" style="margin-top:20px">
+      <div>
+        <h3>Getting there</h3>
+        <ul>
+          <li>Meet at a coffee shop outside baggage claim, Geneva arrivals<small>Tom 1:25 PM · Mike 1:50 PM · Joe 2:40 PM, Thu Jan 14</small></li>
+          <li>Shared van to Châtel, 3:40 PM<small>Joe and Mike booked. Tom: book the same pickup.</small></li>
+          <li>Home flights<small>Mike Tue 9:05 AM (van 5:05 AM) · Tom Tue 12:20 PM · Joe Sat Jan 23, 8:10 AM</small></li>
+          <li><a href="https://www.chateltransfer.com/" target="_blank" rel="noopener">Chatel Transfers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Passes and gear</h3>
+        <ul>
+          <li>Espace Liberté covers Châtel, Morgins (Corbeau), Torgon and La Chapelle<small>Not Avoriaz, Morzine, Les Gets or Champéry</small></li>
+          <li>Monday in Avoriaz needs Portes du Soleil<small>Mike and Tom: 3-day Liberté + 1-day Portes du Soleil, or 4-day Portes du Soleil if close in price. Joe: ask about the extension discount for 5+ day passes.</small></li>
+          <li>Rentals through Skimium, same as last year<small>Joe is booked. Tom: book online.</small></li>
+          <li><a href="https://www.skipass-chatel.com/en/tarifs-hiver" target="_blank" rel="noopener">Lift passes</a> · <a href="https://www.skimium.co.uk/" target="_blank" rel="noopener">Skimium</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>House rules</h3>
+        <ul>
+          <li>Book dinners early<small>Restaurants filled up last year.</small></li>
+          <li>At least one raclette night<small>Café Zeph is pencilled in for Saturday.</small></li>
+          <li>Swim briefs at Forme d’O<small>French pool rules: no board shorts. Closed Mondays.</small></li>
+          <li>Join the Airbnb reservation<small>Use Joe’s link from his email or the group text.</small></li>
+        </ul>
       </div>
     </div>
+  </section>
+</main>
 
-    <div>
-      <div class="chips" id="dayChips" role="group" aria-label="Choose a day"></div>
-      <div id="days" style="margin-top:14px"></div>
-    </div>
+<footer>
+  <div class="container">
+    <b>Ski week in Châtel</b> · Jan 14–19, 2027<br>
+    Opening hours come from Google listings checked in November 2026; winter hours can differ. Shuttle times are from the 2025/26 season. Map data © OpenStreetMap contributors; ski runs © OpenSnowMap.
   </div>
+</footer>
 
-  <h2>From the Airbnb to the lifts</h2>
-  <div class="how">
-    <div class="card"><h3>Walk to Super-Châtel</h3><p>About 650 m to the gondola in the village center, roughly 10 minutes in ski boots. Used on Friday and Sunday.</p><p class="linkrow"><a href="https://www.google.com/maps/dir/?api=1&amp;origin=46.26925,6.83526&amp;destination=46.26662,6.84241&amp;travelmode=walking">Walking directions</a></p></div>
-    <div class="card"><h3>Free ski shuttles</h3><p>Line 3 (Centre / Béchigne / Jardy / Linga) stops at Béchigne and runs to the Linga lifts. Line 1 runs from the center to Linga and Pré-la-Joux. Both ran about every 15 minutes last season, from 8:30 and 8:00 AM. The Pysae app shows live times.</p></div>
-  </div>
-
-  <h2>Places</h2>
-  <div class="card">
-    <div class="chips" id="placeFilter" aria-label="Filter places"></div>
-    <div id="placeList" class="places" style="margin-top:8px"></div>
-  </div>
-
-  <h2>From Joe’s trip email</h2>
-  <div class="how">
-    <div class="card"><h3>Meeting in Geneva</h3><p>All three of us land Thursday, January 14 between 1:25 and 2:40 PM. Meet outside baggage claim in the arrivals hall at one of the coffee shops.</p></div>
-    <div class="card"><h3>Transfer to Châtel</h3><p>Joe and Mike are booked on the 3:40 PM Chatel Transfers pickup on Thursday. Tom: book the same pickup so we’re all in one van (Joe will help with the Châtel drop-off address).</p><p>Going home: Mike’s transfer leaves Châtel Tuesday, January 19 at 5:05 AM. Tom can ride along or book a later one for his 12:20 PM flight. Joe has his own transfer for the 23rd.</p><p class="linkrow"><a href="https://www.chateltransfer.com/" target="_blank" rel="noopener">Book Chatel Transfers</a></p></div>
-    <div class="card"><h3>Lift tickets</h3><p>Buy from the Châtel lift company, the same place as last year. Joe has his. Mike and Tom still need to buy theirs (see Lift passes below for which ones).</p><p class="linkrow"><a href="https://www.skipass-chatel.com/en/tarifs-hiver" target="_blank" rel="noopener">Châtel / Espace Liberté passes</a></p></div>
-    <div class="card"><h3>Ski and board rental</h3><p>Skimium, the same shop network as last year. Joe’s rental is booked. Tom: book yours online.</p><p class="linkrow"><a href="https://www.skimium.co.uk/" target="_blank" rel="noopener">Skimium rentals</a></p></div>
-    <div class="card"><h3>Accommodation</h3><p>Garden-level apartment 2 at 1124 Route de la Béchigne. Joe sent a link to add your email to the Airbnb reservation; it’s in his email and the group text.</p></div>
-    <div class="card"><h3>Evenings</h3><p>Restaurants were hard to get into last year, so book dinners ahead as the dates get closer. At least one raclette night is required.</p><p>Forme d’O has an outdoor heated pool and sauna. French-style swim briefs are mandatory; board shorts won’t get you in.</p><p>Joe is setting up a group text for the trip.</p></div>
-  </div>
-
-  <h2>Flights and transfers</h2>
-  <div class="tablewrap card">
-    <table>
-      <thead><tr><th>Who</th><th>Lands Geneva</th><th>Leaves Geneva</th><th>Return transfer</th></tr></thead>
-      <tbody>
-        <tr><td>Tom</td><td>Thu Jan 14, 1:25 PM</td><td>Tue Jan 19, 12:20 PM</td><td>Ride with Mike at 5:05 AM, or book a later one</td></tr>
-        <tr><td>Mike</td><td>Thu Jan 14, 1:50 PM</td><td>Tue Jan 19, 9:05 AM</td><td>Booked, 5:05 AM from Châtel</td></tr>
-        <tr><td>Joe</td><td>Thu Jan 14, 2:40 PM</td><td>Sat Jan 23, 8:10 AM</td><td>Booked separately</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h2>Lift passes</h2>
-  <div class="how">
-    <div class="card"><h3>Espace Liberté covers</h3><p>Châtel (Super-Châtel, Barbossine, Linga, Pré-la-Joux), the Corbeau sector of Morgins, Torgon and La Chapelle d’Abondance. Not Avoriaz, Morzine, Les Gets or Champéry.</p></div>
-    <div class="card"><h3>For Monday in Avoriaz</h3><p>Mike and Tom: 3-day Liberté from Fri Jan 15 plus a 1-day Portes du Soleil pass, or a 4-day Portes du Soleil pass if the price is close. Joe: a 5+ day Liberté pass got 20% off a one-day extension last season; confirm at the ticket office.</p><p class="linkrow"><a href="https://www.skipass-chatel.com/en/tarifs-hiver">Buy passes online</a></p></div>
-  </div>
-
-  <footer>Opening hours come from Google listings checked in November 2026; winter hours can differ. Shuttle times are from the 2025/26 season. Map data © OpenStreetMap contributors; ski runs from OpenSnowMap.</footer>
+<div class="mbar">
+  <div><b>Jan 14 – 19</b><small>4 ski days · 3 skiers</small></div>
+  <a class="cta" href="https://www.skipass-chatel.com/en/tarifs-hiver" target="_blank" rel="noopener">Buy lift passes</a>
 </div>
-</div>
+
 <script type="application/json" id="state">{"v": 1, "places": [{"id": "airbnb", "name": "Our Airbnb", "cat": "stay", "lat": 46.26925, "lon": 6.83526, "note": "1124 Route de la Béchigne, apartment 2 (garden level). The Super-Châtel gondola is about 650 m away.", "pid": "ChIJicsP09WjjkcR8Go4i3A58hY", "lab": "Our Airbnb"}, {"id": "gondola", "name": "Super-Châtel gondola", "cat": "lift", "lat": 46.26662, "lon": 6.84241, "note": "In the village center. Friday and Sunday start here.", "cid": "16092782760028794647", "lab": "Super-Châtel gondola"}, {"id": "vonnes", "name": "Vonnes lifts (Portes du Soleil and Gabelou chairs)", "cat": "lift", "lat": 46.25524, "lon": 6.84173, "note": "Chairs linking the Super-Châtel side and the Linga side. Line 4 bus.", "cid": "2053964651691134420", "lab": "Vonnes"}, {"id": "linga", "name": "Linga chair", "cat": "lift", "lat": 46.2389, "lon": 6.81807, "note": "New 6-seat chair. Lines 1, 2 and 3 stop at the Linga bus station.", "cid": "8230850199082031264", "lab": "Linga"}, {"id": "prelajoux", "name": "Pré-la-Joux (Pierre Longue chair)", "cat": "lift", "lat": 46.23728, "lon": 6.7931, "note": "End of Line 1. Pierre Longue chair, then Rochassons, toward Plaine Dranse and Les Lindarets.", "cid": "313600906860938480", "lab": "Pré-la-Joux"}, {"id": "torgon", "name": "Torgon, Tronchey chair", "cat": "lift", "lat": 46.30537, "lon": 6.85111, "note": "Swiss side. Reached from Super-Châtel over the Tour de Don drag.", "cid": "10293127186672645031", "lab": "Torgon", "side": "r"}, {"id": "panthiaz", "name": "La Panthiaz gondola (La Chapelle)", "cat": "lift", "lat": 46.29113, "lon": 6.79968, "note": "Braitaz sector of La Chapelle d’Abondance.", "cid": "11621054028585059947", "lab": "La Panthiaz"}, {"id": "lindarets", "name": "Lindarets chair (Avoriaz side)", "cat": "lift", "lat": 46.20771, "lon": 6.77774, "note": "Portes du Soleil pass only. Chaux Fleurie chair brings you back toward Châtel.", "cid": "14469562247480512654", "lab": "Les Lindarets"}, {"id": "sherpa", "name": "Sherpa supermarket", "cat": "grocery", "lat": 46.26368, "lon": 6.84026, "note": "Main grocery in the village, next to Forme d’O. Local cheese counter and a fresh orange juice machine. Closes for lunch.", "pid": "ChIJjVZGn9GjjkcRv5dx9Bzzq04", "hours": "Daily 7:00 AM–12:30 PM, 3:00–7:15 PM"}, {"id": "epicurie", "name": "L’Épicurie des Alpes", "cat": "grocery", "lat": 46.27286, "lon": 6.8381, "note": "Deli about 400 m from the Airbnb. Regulars order their raclette cheese and ready meals here.", "pid": "ChIJX6WqZNqjjkcRLWRI3gTyWHc", "hours": "Wed–Sat 9:00 AM–12:30 PM, 3:00–7:00 PM"}, {"id": "sosse", "name": "La Cave à Sosse", "cat": "grocery", "lat": 46.26481, "lon": 6.84062, "note": "Cheese, sausage and wine shop. Highly rated for raclette supplies.", "pid": "ChIJF1uWaNCjjkcRLtqoYIgkYUU", "hours": "Listed Sat–Sun 10:00 AM–6:00 PM (winter hours may be longer)"}, {"id": "fermelinga", "name": "La Ferme du Linga", "cat": "grocery", "lat": 46.25493, "lon": 6.82005, "note": "Farm shop: Abondance, raclette and goat cheese made on site. Cash only.", "pid": "ChIJXU97FiyhjkcRT1mowWHalgY", "hours": "Tue, Fri, Sun 6:00–7:00 PM"}, {"id": "intermarche", "name": "Intermarché (toward La Chapelle)", "cat": "grocery", "lat": 46.27761, "lon": 6.82291, "note": "Biggest supermarket nearby, roughly 1.5 km from the Airbnb. Fine for a big shop if you don’t mind the walk with bags.", "pid": "ChIJEW7PD0qgjkcRD3d-rLXXER0", "hours": "Mon–Sat 8:30 AM–7:15 PM, Sun 9:00 AM–12:00 PM"}, {"id": "grenier", "name": "Le Grenier Al’Pain", "cat": "bakery", "lat": 46.2659, "lon": 6.84173, "note": "Bakery that opens at 5:30 AM. Good sandwiches to carry on the mountain.", "pid": "ChIJ830SStCjjkcR_IHn2JUcxQU", "hours": "Daily 5:30 AM–8:00 PM"}, {"id": "grillet", "name": "Boulangerie Grillet", "cat": "bakery", "lat": 46.26689, "lon": 6.84151, "note": "Classic village-center bakery. Eclairs and fruit tarts.", "pid": "ChIJGxqAvNGjjkcRl_ezyqhImsg", "hours": "Daily 7:00 AM–12:30 PM, 3:00–7:00 PM"}, {"id": "bistrom", "name": "BistroM", "cat": "dinner", "lat": 46.26359, "lon": 6.83899, "note": "Beef fondue, tartiflette, slow-cooked lamb. Near Sherpa, so it fits a grocery stop.", "pid": "ChIJbRA0FjujjkcRiVl6eQopDiM", "hours": "Dinner Mon–Thu 6:00–10:00 PM"}, {"id": "renard", "name": "Le Renard", "cat": "dinner", "lat": 46.25795, "lon": 6.82861, "note": "Savoyard menu, Anglo-French owners, cozy room. On the way to Linga; check the last shuttle home.", "pid": "ChIJVSgRRWehjkcRbqDEgCRizrY", "hours": "Dinner Thu–Sat 7:00–9:00 PM"}, {"id": "zeph", "name": "Café Zeph", "cat": "dinner", "lat": 46.26704, "lon": 6.8413, "note": "Raclette at the table; reviewers call it one of the best they’ve had. Also burgers and steak. Book ahead.", "pid": "ChIJSZSqvNGjjkcRTnUp1aioQDA", "hours": "Dinner 5:30–10:00 PM; closed Wednesday, no dinner Tuesday"}, {"id": "cheminee", "name": "La Cheminée", "cat": "dinner", "lat": 46.26709, "lon": 6.8419, "note": "Côte de bœuf and pork ribs; strong service reviews.", "pid": "ChIJMQlKv9GjjkcRDayWY84PCP0", "hours": "Dinner daily from 7:00 PM"}, {"id": "belle", "name": "La Belle Rencontre", "cat": "dinner", "lat": 46.26718, "lon": 6.84197, "note": "Fondue specialist (truffle and Black Angus versions). One owner runs the whole room, so book.", "pid": "ChIJx5UfhK2jjkcRLguGtiB3mQY", "hours": "Daily 11:30 AM–11:00 PM"}, {"id": "chesery", "name": "Le Chesery", "cat": "dinner", "lat": 46.2674, "lon": 6.84143, "note": "Fondue and steak in the center. Mixed service reviews.", "pid": "ChIJvbp3mdGjjkcRbrD17XOrjjU", "hours": "Tue–Sat; closed Sun–Mon"}, {"id": "corbeau", "name": "Buvette du Corbeau (Morgins)", "cat": "lunch", "lat": 46.24616, "lon": 6.86097, "note": "Corbeau sector of Morgins. Soup, cheese tarts, vin chaud, sunny terrace.", "pid": "ChIJi1NthpCjjkcRcPeAuXMLngk", "lab": "Buvette du Corbeau"}, {"id": "fermepistes", "name": "La Ferme des Pistes (Linga)", "cat": "lunch", "lat": 46.2396, "lon": 6.81953, "note": "Traditional mountain restaurant; regulars rave about the tartiflette. Cash only.", "pid": "ChIJhaB9i1OhjkcRhiZMH-we8Co", "hours": "Daily 9:00 AM–5:00 PM", "lab": "Ferme des Pistes"}, {"id": "crepy", "name": "Chez Crépy (Plaine Dranse)", "cat": "lunch", "lat": 46.21747, "lon": 6.79421, "note": "Best sit-down lunch on the Châtel side by most reviews. Order the berthoud.", "pid": "ChIJ284ib-qmjkcRkGfrBtscry4", "hours": "Daily 9:00 AM–5:00 PM", "lab": "Chez Crépy"}, {"id": "folie", "name": "La Folie des Neiges (Plaine Dranse)", "cat": "lunch", "lat": 46.2188, "lon": 6.79221, "note": "Burgers and homemade fries, first terrace to get sun, happy hour from 3:30.", "pid": "ChIJVVW5pNGjjkcRyZqO7h3KpBo", "lab": "Folie des Neiges"}, {"id": "bourri", "name": "Buvette d’alpage La Bourri (Torgon)", "cat": "lunch", "lat": 46.30544, "lon": 6.83638, "note": "Alpage de Recon. Fondue and real coffee. Confirm it’s reachable on skis from the Torgon lifts before counting on it.", "pid": "ChIJ64J7cfmhjkcR1qMIozJ0UhY", "hours": "Fri–Sun 9:30 AM–6:00 PM", "lab": "La Bourri"}, {"id": "tseudron", "name": "Le Tseudron (Torgon)", "cat": "lunch", "lat": 46.30609, "lon": 6.85093, "note": "Self-service at the bottom of the Tronchey chair. Backup if La Bourri doesn’t work.", "pid": "ChIJcYcoJ6SYjkcRZBeCzcEkEgQ", "lab": "Le Tseudron"}, {"id": "mamos", "name": "Mamo’s Café (Les Lindarets)", "cat": "lunch", "lat": 46.20796, "lon": 6.77643, "note": "Best-reviewed burgers and galettes in the valley.", "pid": "ChIJcU8hpuKmjkcReMQw4e1Fz1g", "hours": "Daily 9:00 AM–5:00 PM", "lab": "Mamo’s Café"}, {"id": "petitlindaret", "name": "Le Petit Lindaret (Les Lindarets)", "cat": "lunch", "lat": 46.21096, "lon": 6.77408, "note": "Traditional room; the croûte and daily specials get the praise.", "pid": "ChIJcU8hpuKmjkcRDC4V_ChrS-Q", "hours": "Daily 9:00 AM–5:00 PM", "lab": "Petit Lindaret"}, {"id": "godille", "name": "La Godille", "cat": "bar", "lat": 46.26713, "lon": 6.84146, "note": "Family-run bar in the center with local Brasserie du Mont Blanc beers and a terrace.", "pid": "ChIJJzb-vNGjjkcRZ_CaGQHfrZo"}, {"id": "avalanche", "name": "Avalanche Pub", "cat": "bar", "lat": 46.26532, "lon": 6.84054, "note": "Sports bar with pool table and a balcony view. Skip the food.", "pid": "ChIJGfxIrNGjjkcR5uA5DpGx-do"}, {"id": "formedo", "name": "Forme d’O", "cat": "activity", "lat": 46.26309, "lon": 6.83975, "note": "Indoor and outdoor pools, saunas, hammams. Swim briefs required; they sell them at the desk at a markup.", "cid": "4030432019564530472", "hours": "Tue–Sun 12:00–7:00 PM; closed Monday"}, {"id": "richard", "name": "Richard Sports (Skimium), village", "cat": "rental", "lat": 46.26623, "lon": 6.84087, "note": "Skimium shop in the center. The listing shows Thursday closed, so confirm pickup times for arrival day.", "pid": "ChIJtVesqNGjjkcRAmoCsYnr6d8"}, {"id": "skimiumlinga", "name": "Skimium Sports Liberté, Linga", "cat": "rental", "lat": 46.25529, "lon": 6.81962, "note": "Skimium shop at Linga, open daily.", "pid": "ChIJpcftYV2hjkcRvFuc7I-VydY", "hours": "Daily 9:00 AM–7:00 PM"}], "days": [{"id": "thu", "short": "Thu 14", "label": "Thursday, January 14", "title": "Arrive", "pass": "", "getThere": "Shared Chatel Transfers van from Geneva at 3:40 PM, about 1h40 to Châtel. Sherpa is about 700 m from the Airbnb and closes at 7:15 PM, so shop on the way in or right after drop-off.", "plan": ["Meet at a coffee shop outside baggage claim in Geneva arrivals (Mike 1:50 PM, Tom 1:25 PM, Joe 2:40 PM).", "Check in at the Airbnb.", "Groceries for breakfasts and the week."], "cutoff": "", "route": []}, {"id": "fri", "short": "Fri 15", "label": "Friday, January 15", "title": "Super-Châtel and Morgins", "pass": "Liberté", "getThere": "Walk to the Super-Châtel gondola, about 650 m (roughly 10 minutes in boots). Coming home, ski back toward the village if the snow allows, or ride the gondola down.", "plan": ["Super-Châtel gondola; warm up on Morclan and Conche.", "Chalet Neuf drag into the Corbeau sector of Morgins.", "Short day for jet lag."], "cutoff": "Stay on the Corbeau side of Morgins; the rest of Morgins isn’t on the Liberté pass.", "route": ["airbnb", "gondola", "corbeau"]}, {"id": "sat", "short": "Sat 16", "label": "Saturday, January 16", "title": "Linga and Pré-la-Joux", "pass": "Liberté", "getThere": "Line 3 shuttle (Centre village / Béchigne / Jardy / Linga) from the Béchigne stop to the Linga bus station. It ran every 15 minutes from 8:30 AM last season. Home the same way.", "plan": ["Linga chair; steepest terrain on the Liberté pass.", "Ski across to Pré-la-Joux; afternoon laps on Pierre Longue and Rochassons.", "Saturday is chalet changeover day, usually the quietest on the slopes."], "cutoff": "Don’t ski down the far side of Rochassons toward Les Lindarets today; that’s off the Liberté pass.", "route": ["airbnb", "linga", "prelajoux"]}, {"id": "sun", "short": "Sun 17", "label": "Sunday, January 17", "title": "Torgon and La Chapelle traverse", "pass": "Liberté", "getThere": "Walk to the Super-Châtel gondola, about 650 m. Start early; this is the longest day.", "plan": ["Super-Châtel gondola, then the Tour de Don drag over into Torgon.", "Djeu des Têtes and Conche 2000 drags toward La Chapelle.", "La Panthiaz gondola into the Braitaz sector."], "cutoff": "Turn for home by about 2:00 PM. The way back depends on drag lifts. If snow is thin at this low altitude, swap the day for Super-Châtel and Barbossine.", "route": ["airbnb", "gondola", "torgon", "panthiaz"]}, {"id": "mon", "short": "Mon 18", "label": "Monday, January 18", "title": "Avoriaz via Les Lindarets", "pass": "Portes du Soleil", "getThere": "Walk to the village center and take Line 1 to Pré-la-Joux; it ran every 15 minutes from 8:00 AM last season. Line 3 to Linga also works if you ski across.", "plan": ["At Pré-la-Joux by 8:45 AM. Pierre Longue chair, then Rochassons.", "Ski down to Les Lindarets, then the Lindarets chair up to Avoriaz.", "Home: ski back to Les Lindarets, Chaux Fleurie chair up, Rochassons down."], "cutoff": "Be on the Chaux Fleurie chair at Les Lindarets by about 3:15 PM; check the posted last-lift time. Pack Sunday night: Mike’s van leaves at 5:05 AM Tuesday.", "route": ["airbnb", "prelajoux", "lindarets", "mamos"]}], "plan": [{"day": "thu", "slot": "Groceries", "placeId": "sherpa", "note": "Closes 7:15 PM"}, {"day": "thu", "slot": "Dinner", "placeId": "bistrom", "note": ""}, {"day": "fri", "slot": "Lunch", "placeId": "corbeau", "note": ""}, {"day": "fri", "slot": "Après", "placeId": "formedo", "note": "Bring swim briefs"}, {"day": "fri", "slot": "Dinner", "placeId": "renard", "note": "Book ahead"}, {"day": "sat", "slot": "Lunch", "placeId": "fermepistes", "note": "Bring cash"}, {"day": "sat", "slot": "Après", "placeId": "godille", "note": ""}, {"day": "sat", "slot": "Dinner", "placeId": "zeph", "note": "Raclette night. Book ahead."}, {"day": "sun", "slot": "Lunch", "placeId": "bourri", "note": "Backup: Le Tseudron at the Torgon base"}, {"day": "sun", "slot": "Dinner", "placeId": "cheminee", "note": ""}, {"day": "mon", "slot": "Breakfast", "placeId": "grenier", "note": "Grab sandwiches"}, {"day": "mon", "slot": "Lunch", "placeId": "mamos", "note": ""}, {"day": "mon", "slot": "Dinner", "placeId": "belle", "note": "Early dinner, then pack"}]}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script id="app">
+<script>
 (function(){
 "use strict";
 var S=JSON.parse(document.getElementById("state").textContent);
-var CATS={stay:"Our place",lift:"Lifts",grocery:"Groceries and food shops",bakery:"Bakeries",lunch:"Mountain lunch",dinner:"Dinner",bar:"Après and bars",activity:"Things to do",rental:"Ski rental",custom:"Other"};
+var CATS={lunch:"Mountain lunch",dinner:"Dinner",bar:"Après",grocery:"Groceries",bakery:"Bakeries",activity:"Things to do",rental:"Rentals",lift:"Lifts",stay:"Our place",custom:"Other"};
 var SLOTS=["Breakfast","Groceries","Lunch","Après","Dinner","Other"];
-var BOUNDS={village:[[46.2624,6.8340],[46.2736,6.8436]],area:[[46.2000,6.7690],[46.3120,6.8680]]};
-var st={day:"all",cats:{},pfilter:"all",sel:null};
-Object.keys(CATS).forEach(function(k){st.cats[k]=true;});
+var ICON={
+ stay:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v12h14V9"/><path d="M10 21v-6h4v6"/>',
+ lift:'<path d="M2 4l20 4"/><path d="M12 6v4"/><rect x="6" y="10" width="12" height="10" rx="2.5"/><path d="M6 14h12"/>',
+ grocery:'<path d="M3 4h2l2.2 10.4a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.5L20.5 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="17" cy="20" r="1.2"/>',
+ bakery:'<path d="M4 14c0-4.4 3.6-8 8-8s8 3.6 8 8v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M9 10v4M12 9v5M15 10v4"/>',
+ dinner:'<path d="M7 3v18M4.5 3v5a2.5 2.5 0 0 0 5 0V3"/><path d="M17 21V3c-2.2 0-3.5 3-3.5 7.5H17"/>',
+ lunch:'<path d="m2 20 7-11 4 6 2.5-3.5L22 20z"/><circle cx="17" cy="5.5" r="2"/>',
+ bar:'<path d="M5 4h14l-7 8z"/><path d="M12 12v8M8 20h8"/>',
+ activity:'<path d="M2 16c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M2 20c2 0 2-1.5 4-1.5s2 1.5 4 1.5 2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/><path d="M8 12V6a2 2 0 0 1 4 0M16 12V6a2 2 0 0 0-4 0"/>',
+ rental:'<path d="M6 21 18 3"/><path d="M10 21 21 4.5"/><path d="M9 14l3 1.5M12 10l3 1.5"/>',
+ custom:'<path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+ all:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+ plane:'<path d="M21 15.5 13 11V5a1.5 1.5 0 0 0-3 0v6l-8 4.5V17l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-4.5l8 2.5z"/>',
+ walk:'<circle cx="13" cy="4" r="1.6"/><path d="M10 21l2-6 3 3v3M9 11l3-3 3 3 3 1M12 8l-2 5"/>',
+ bus:'<rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 18v3M16 18v3"/>',
+ van:'<path d="M3 7h11l4 4h3v6H3z"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+ warn:'<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>',
+ chev:'<path d="m9 6 6 6-6 6"/>',
+ mtn:'<path d="m2 20 7-11 4 6 2.5-3.5L22 20z"/>'
+};
+var DAYICON={thu:"plane",fri:"lift",sat:"lunch",sun:"mtn",mon:"rental"};
+var HOWICON={thu:"van",fri:"walk",sat:"bus",sun:"walk",mon:"bus"};
+var PAL={thu:["#F7B267","#F4845F","#5B4B8A"],fri:["#9AD1F5","#4A90D9","#1F3B73"],sat:["#C6EBD8","#5FB98E","#1E5B47"],sun:["#D7C8F5","#8C6AD6","#3A2A6B"],mon:["#FFC2B5","#FF6B6B","#7A1F3D"],all:["#FFD3DC","#FF5A7A","#3B1530"]};
+function ico(name,cls){return '<svg class="i'+(cls?" "+cls:"")+'" viewBox="0 0 24 24" aria-hidden="true">'+(ICON[name]||ICON.custom)+'</svg>';}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
 function $(id){return document.getElementById(id);}
-function el(tag,attrs,kids){var e=document.createElement(tag);if(attrs){for(var k in attrs){if(k==="text")e.textContent=attrs[k];else if(k==="class")e.className=attrs[k];else if(k.slice(0,2)==="on")e.addEventListener(k.slice(2),attrs[k]);else e.setAttribute(k,attrs[k]);}}(kids||[]).forEach(function(c){if(c!=null)e.appendChild(typeof c==="string"?document.createTextNode(c):c);});return e;}
 function place(id){for(var i=0;i<S.places.length;i++)if(S.places[i].id===id)return S.places[i];return null;}
 function dayById(id){for(var i=0;i<S.days.length;i++)if(S.days[i].id===id)return S.days[i];return null;}
 function ck(c){return CATS[c]?c:"custom";}
-function catColor(c){return "var(--c-"+ck(c)+")";}
-function cssVar(name){return getComputedStyle(document.documentElement).getPropertyValue(name).trim()||"#2366C9";}
-function mapsUrl(p){
-  if(p.url)return p.url;
-  if(p.cid)return "https://maps.google.com/?cid="+p.cid;
-  if(p.pid)return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(p.name+" Châtel")+"&query_place_id="+p.pid;
-  return "https://www.google.com/maps/search/?api=1&query="+p.lat+","+p.lon;
-}
+function tint(c){return "var(--t-"+ck(c)+")";}
+function ink(c){return "var(--i-"+ck(c)+")";}
+function mapsUrl(p){if(p.url)return p.url;if(p.cid)return "https://maps.google.com/?cid="+p.cid;if(p.pid)return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(p.name+" Châtel")+"&query_place_id="+p.pid;return "https://www.google.com/maps/search/?api=1&query="+p.lat+","+p.lon;}
 function walkUrl(p){return "https://www.google.com/maps/dir/?api=1&origin=46.26925,6.83526&destination="+p.lat+","+p.lon+"&travelmode=walking";}
-function plannedIds(day){var s={};S.plan.forEach(function(x){if(day==="all"||x.day===day)s[x.placeId]=true;});return s;}
-function routeIds(day){var s={};S.days.forEach(function(d){if(day==="all"||d.id===day)d.route.forEach(function(r){s[r]=true;});});return s;}
+var HOME=place("airbnb");
+function dist(p){if(!HOME||p.lat==null)return "";var R=6371000,t=Math.PI/180,dl=(p.lat-HOME.lat)*t,dn=(p.lon-HOME.lon)*t,a=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(HOME.lat*t)*Math.cos(p.lat*t)*Math.sin(dn/2)*Math.sin(dn/2),d=2*R*Math.asin(Math.sqrt(a));return d<950?(Math.round(d/50)*50)+" m away":(d/1000).toFixed(d<10000?1:0)+" km away";}
+function uses(id){return S.plan.filter(function(x){return x.placeId===id;});}
+function useLabel(x){var d=dayById(x.day);return (d?d.short.split(" ")[0]:"")+" "+x.slot.toLowerCase();}
+var st={day:"all",cat:"all"};
+
+/* ---------- hero ---------- */
+function scene(seed,pal,w,h){
+  var g="g"+seed;
+  return '<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="'+g+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+pal[0]+'"/><stop offset="1" stop-color="'+pal[1]+'"/></linearGradient></defs>'+
+  '<rect width="'+w+'" height="'+h+'" fill="url(#'+g+')"/>'+
+  '<circle cx="'+(w*(0.2+0.12*(seed%4)))+'" cy="'+(h*0.28)+'" r="'+(h*0.09)+'" fill="#fff" opacity=".55"/>'+
+  '<path d="M0 '+h*0.72+' L'+w*0.18+' '+h*0.45+' L'+w*0.32+' '+h*0.6+' L'+w*0.52+' '+h*0.32+' L'+w*0.7+' '+h*0.55+' L'+w*0.86+' '+h*0.4+' L'+w+' '+h*0.58+' V'+h+' H0Z" fill="'+pal[2]+'" opacity=".55"/>'+
+  '<path d="M'+w*0.52+' '+h*0.32+' L'+w*0.57+' '+h*0.39+' L'+w*0.53+' '+h*0.37+' L'+w*0.48+' '+h*0.4+'Z" fill="#fff" opacity=".9"/>'+
+  '<path d="M0 '+h*0.86+' L'+w*0.25+' '+h*0.58+' L'+w*0.42+' '+h*0.74+' L'+w*0.62+' '+h*0.52+' L'+w*0.85+' '+h*0.78+' L'+w+' '+h*0.66+' V'+h+' H0Z" fill="'+pal[2]+'"/>'+
+  '<path d="M'+w*0.25+' '+h*0.58+' L'+w*0.3+' '+h*0.64+' L'+w*0.26+' '+h*0.62+' L'+w*0.21+' '+h*0.65+'Z M'+w*0.62+' '+h*0.52+' L'+w*0.68+' '+h*0.6+' L'+w*0.63+' '+h*0.58+' L'+w*0.57+' '+h*0.61+'Z" fill="#fff" opacity=".95"/>'+
+  '<path d="M0 '+h+' C'+w*0.3+' '+h*0.86+' '+w*0.7+' '+h*0.95+' '+w+' '+h*0.84+' V'+h+'Z" fill="#fff" opacity=".9"/></svg>';
+}
+function renderHero(){
+  var h=$("hero"),html='<button class="tile big" data-day="all">'+scene(9,PAL.all,800,420)+'<span class="cap"><b>Châtel, Jan 14–19</b><small>Four ski days in the Portes du Soleil</small></span></button>';
+  ["fri","sat","sun","mon"].forEach(function(id,i){var d=dayById(id);html+='<button class="tile" data-day="'+id+'">'+scene(i,PAL[id],400,220)+'<span class="cap"><b>'+esc(d.short)+'</b><small>'+esc(d.title)+'</small></span></button>';});
+  h.innerHTML=html;
+  h.querySelectorAll(".tile").forEach(function(t){t.addEventListener("click",function(){setDay(t.getAttribute("data-day"));$("itinerary").scrollIntoView();});});
+}
+
+/* ---------- itinerary ---------- */
+function renderDayTabs(){
+  var b=$("dayTabs"),html='<button role="tab" data-d="all" aria-selected="'+(st.day==="all")+'">'+ico("all")+'All days</button>';
+  S.days.forEach(function(d){html+='<button role="tab" data-d="'+d.id+'" aria-selected="'+(st.day===d.id)+'">'+ico(DAYICON[d.id])+esc(d.short)+'</button>';});
+  b.innerHTML=html;b.querySelectorAll("button").forEach(function(x){x.addEventListener("click",function(){setDay(x.getAttribute("data-d"));});});
+}
+function renderDays(){
+  var html="";
+  S.days.forEach(function(d,i){
+    if(st.day!=="all"&&st.day!==d.id)return;
+    html+='<article class="day"><div class="dayhead"><div><div class="kicker">Day '+(i+1)+' · '+esc(d.label)+'</div><h3>'+esc(d.title)+'</h3></div>';
+    if(d.pass)html+='<span class="passchip'+(d.pass==="Portes du Soleil"?" pds":"")+'">'+ico("lift")+esc(d.pass)+' pass</span>';
+    html+='</div><div class="how">'+ico(HOWICON[d.id])+'<p style="margin:0"><b>Getting to the lifts</b><span>'+esc(d.getThere)+'</span></p></div>';
+    html+='<ol class="steps">'+d.plan.map(function(t){return "<li><span>"+esc(t)+"</span></li>";}).join("")+'</ol>';
+    if(d.cutoff)html+='<div class="heads">'+ico("warn")+'<span>'+esc(d.cutoff)+'</span></div>';
+    var items=S.plan.filter(function(x){return x.day===d.id;}).sort(function(a,b){return SLOTS.indexOf(a.slot)-SLOTS.indexOf(b.slot);});
+    if(items.length){html+='<div class="stops">';items.forEach(function(x){var p=place(x.placeId);if(!p)return;
+      html+='<button class="stop" data-p="'+p.id+'"><span class="thumb" style="background:'+tint(p.cat)+';color:'+ink(p.cat)+'">'+ico(ck(p.cat))+'</span><span><b>'+esc(p.name)+'</b><small>'+esc(x.slot)+(x.note?' · '+esc(x.note):'')+'</small></span><span class="chev">'+ico("chev")+'</span></button>';});html+='</div>';}
+    html+='</article>';
+  });
+  $("days").innerHTML=html;
+  $("days").querySelectorAll(".stop").forEach(function(b){b.addEventListener("click",function(){focusPlace(b.getAttribute("data-p"));});});
+}
+function setDay(d){st.day=d;renderDayTabs();renderDays();renderMarkers();fitDay();
+  var dd=dayById(d);$("mapLead").textContent=dd?("Showing "+dd.label+": "+dd.title+"."):"Châtel, Haute-Savoie, France. Ski runs and lifts are overlaid on the map.";}
+
+/* ---------- places grid ---------- */
+function renderCatTabs(){
+  var present={};S.places.forEach(function(p){if(p.cat!=="stay")present[ck(p.cat)]=true;});
+  var html='<button role="tab" data-c="all" aria-selected="'+(st.cat==="all")+'">'+ico("all")+'All</button>';
+  Object.keys(CATS).forEach(function(k){if(present[k])html+='<button role="tab" data-c="'+k+'" aria-selected="'+(st.cat===k)+'">'+ico(k)+esc(CATS[k])+'</button>';});
+  var b=$("catTabs");b.innerHTML=html;b.querySelectorAll("button").forEach(function(x){x.addEventListener("click",function(){st.cat=x.getAttribute("data-c");renderCatTabs();renderGrid();});});
+}
+function renderGrid(){
+  var order=Object.keys(CATS),list=S.places.filter(function(p){return p.cat!=="stay"&&(st.cat==="all"||ck(p.cat)===st.cat);});
+  list.sort(function(a,b){var ua=uses(a.id).length?0:1,ub=uses(b.id).length?0:1;return ua-ub||order.indexOf(ck(a.cat))-order.indexOf(ck(b.cat));});
+  $("grid").innerHTML=list.map(function(p){var u=uses(p.id);
+    return '<button class="lcard" data-p="'+p.id+'"><div class="ph" style="background:'+tint(p.cat)+';color:'+ink(p.cat)+'">'+(u.length?'<span class="pill">'+esc(useLabel(u[0]))+'</span>':'')+'<span class="disc">'+ico(ck(p.cat),"big")+'</span>'+(dist(p)?'<span class="dist">'+dist(p)+'</span>':'')+'</div><h4>'+esc(p.name)+'</h4><p>'+esc(p.note||"")+'</p>'+(p.hours?'<div class="hrs">'+esc(p.hours)+'</div>':'')+'</button>';}).join("");
+  $("grid").querySelectorAll(".lcard").forEach(function(b){b.addEventListener("click",function(){focusPlace(b.getAttribute("data-p"));});});
+}
 
 /* ---------- map ---------- */
-var map=L.map("map",{scrollWheelZoom:false,zoomControl:true});
+var map=L.map("map",{scrollWheelZoom:false});
 var osm=L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'});
 var topo=L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",{maxZoom:17,subdomains:"abc",attribution:'Map data &copy; OpenStreetMap contributors, SRTM | Style &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)'});
 var pistes=L.tileLayer("https://tiles.opensnowmap.org/pistes/{z}/{x}/{y}.png",{maxZoom:18,attribution:'Pistes &copy; <a href="https://www.opensnowmap.org">OpenSnowMap</a>'});
 osm.addTo(map);pistes.addTo(map);
-L.control.layers({"Street map":osm,"Topographic":topo},{"Ski runs and lifts":pistes},{collapsed:true}).addTo(map);
-L.control.scale({imperial:true,metric:true}).addTo(map);
-var routeLayer=L.layerGroup().addTo(map),markerLayer=L.layerGroup().addTo(map);
-var markers={};
-map.fitBounds(BOUNDS.village);
-
-function popupFor(p){
-  var uses=S.plan.filter(function(x){return x.placeId===p.id;}).map(function(x){var d=dayById(x.day);return (d?d.short:x.day)+" "+x.slot.toLowerCase();});
-  var kids=[el("strong",{"class":"pt",text:p.name}),el("div",{"class":"meta",text:CATS[ck(p.cat)]})];
-  if(p.note)kids.push(el("div",{text:p.note}));
-  if(p.hours)kids.push(el("div",{"class":"meta",text:"Hours: "+p.hours}));
-  if(uses.length)kids.push(el("div",{"class":"meta",text:"In the plan: "+uses.join(", ")}));
-  var links=el("div",{"class":"linkrow"},[el("a",{href:mapsUrl(p),target:"_blank",rel:"noopener",text:"Google Maps"})]);
-  if(p.id!=="airbnb")links.appendChild(el("a",{href:walkUrl(p),target:"_blank",rel:"noopener",text:"Walk from the Airbnb"}));
-  kids.push(links);
-  return el("div",{"class":"pop"},kids);
-}
+L.control.layers({"Street map":osm,"Topographic":topo},{"Ski runs and lifts":pistes}).addTo(map);
+var routeL=L.layerGroup().addTo(map),markL=L.layerGroup().addTo(map),markers={};
+var DAYCOL={thu:"#5B4B8A",fri:"#2366C9",sat:"#24805A",sun:"#6A4CB4",mon:"#FF385C"};
+var AREA=[[46.2000,6.7690],[46.3120,6.8680]];
+map.fitBounds(AREA);
+function routeIds(day){var s={};S.days.forEach(function(d){if(day==="all"||d.id===day)d.route.forEach(function(r){s[r]=true;});});return s;}
+function planIds(day){var s={};S.plan.forEach(function(x){if(day==="all"||x.day===day)s[x.placeId]=true;});return s;}
+function popup(p){var u=uses(p.id).map(useLabel);
+  return '<div class="pop"><div class="ph" style="background:'+tint(p.cat)+';color:'+ink(p.cat)+'">'+ico(ck(p.cat))+'</div><div class="bd"><h4>'+esc(p.name)+'</h4>'+(p.note?'<p>'+esc(p.note)+'</p>':'')+(p.hours?'<p>'+esc(p.hours)+'</p>':'')+(u.length?'<p><b style="color:var(--ink)">In the plan:</b> '+esc(u.join(", "))+'</p>':'')+'<div class="links"><a href="'+esc(mapsUrl(p))+'" target="_blank" rel="noopener">Google Maps</a>'+(p.id!=="airbnb"?'<a href="'+esc(walkUrl(p))+'" target="_blank" rel="noopener">Walk there</a>':'')+'</div></div></div>';}
 function renderMarkers(){
-  markerLayer.clearLayers();routeLayer.clearLayers();markers={};
-  var planned=plannedIds(st.day),routed=routeIds(st.day),focus=st.day!=="all";
-  S.days.forEach(function(d){
-    if(d.route.length<2)return;
-    var pts=d.route.map(place).filter(function(p){return p&&p.lat!=null;}).map(function(p){return [p.lat,p.lon];});
-    var on=(st.day==="all"||st.day===d.id);
-    L.polyline(pts,{color:cssVar("--"+d.id),weight:on?5:3,opacity:on?(focus?0.95:0.7):0.18,dashArray:"10 8",interactive:false}).addTo(routeLayer);
-  });
-  var a=place("airbnb"),g=place("gondola");
-  if(a&&g&&(st.day==="all"||st.day==="fri"||st.day==="sun"))L.polyline([[a.lat,a.lon],[g.lat,g.lon]],{color:cssVar("--fri"),weight:3,dashArray:"2 7",interactive:false}).addTo(routeLayer);
-  S.places.forEach(function(p){
-    if(p.lat==null||!st.cats[ck(p.cat)])return;
-    var hot=planned[p.id]||routed[p.id]||p.cat==="stay";
-    var dim=focus&&!hot&&p.id!==st.sel;
-    var m;
-    if(p.cat==="stay"){
-      m=L.marker([p.lat,p.lon],{icon:L.divIcon({className:"home-pin",html:"<span>Airbnb</span>",iconSize:[64,26],iconAnchor:[32,13]}),zIndexOffset:1000,title:p.name});
-    }else{
-      m=L.circleMarker([p.lat,p.lon],{radius:p.cat==="lift"?8:7,color:"#ffffff",weight:2,fillColor:cssVar("--c-"+ck(p.cat)),fillOpacity:dim?0.3:1,opacity:dim?0.4:1});
-      if(focus&&hot)m.bindTooltip(p.lab||p.name,{permanent:true,direction:"right",offset:[8,0],className:"tip"});
-      else m.bindTooltip(p.lab||p.name,{direction:"top",offset:[0,-6]});
-    }
-    m.bindPopup(function(){return popupFor(p);},{maxWidth:280});
-    m.on("click",function(){st.sel=p.id;});
-    m.addTo(markerLayer);markers[p.id]=m;
-  });
+  routeL.clearLayers();markL.clearLayers();markers={};
+  var focus=st.day!=="all",rid=routeIds(st.day),pid=planIds(st.day);
+  S.days.forEach(function(d){if(d.route.length<2)return;var on=!focus||st.day===d.id;
+    L.polyline(d.route.map(place).filter(Boolean).map(function(p){return[p.lat,p.lon];}),{color:DAYCOL[d.id],weight:on?4:2,opacity:on?.9:.15,dashArray:"8 8",interactive:false}).addTo(routeL);});
+  S.places.forEach(function(p){if(p.lat==null)return;
+    var hot=rid[p.id]||pid[p.id],cls="mk"+(p.cat==="stay"?" home":p.cat==="lift"?" lift":"")+(focus&&hot&&p.cat!=="stay"&&p.cat!=="lift"?" on":"")+(focus&&!hot&&p.cat!=="stay"?" dim":"");
+    var size=p.cat==="stay"?40:30;
+    var m=L.marker([p.lat,p.lon],{icon:L.divIcon({className:"",html:'<div class="'+cls+'">'+ico(ck(p.cat))+'</div>',iconSize:[size,size],iconAnchor:[size/2,size/2],popupAnchor:[0,-size/2]}),title:p.name,zIndexOffset:p.cat==="stay"?1000:(hot?500:0),keyboard:true});
+    m.bindPopup(popup(p),{maxWidth:260,minWidth:260,autoPanPadding:[30,30]});
+    if(focus&&hot&&p.cat!=="stay")m.bindTooltip(p.lab||p.name,{permanent:true,direction:"right",offset:[14,0],className:"lbl"});
+    else m.bindTooltip(p.lab||p.name,{direction:"top",offset:[0,-16],className:"lbl"});
+    m.addTo(markL);markers[p.id]=m;});
 }
 function fitDay(){
-  if(st.day==="all"||st.day==="thu"){map.fitBounds(st.day==="thu"?BOUNDS.village:BOUNDS.area,{padding:[10,10]});setTab(st.day==="thu"?"village":"area");return;}
-  var d=dayById(st.day),ids=routeIds(st.day),pl=plannedIds(st.day),pts=[];
-  S.places.forEach(function(p){if(p.lat!=null&&(ids[p.id]||pl[p.id]))pts.push([p.lat,p.lon]);});
-  if(pts.length)map.fitBounds(pts,{padding:[30,30]});setTab("");
+  if(st.day==="all"){map.fitBounds(AREA);return;}
+  var rid=routeIds(st.day),pid=planIds(st.day),pts=[];
+  S.places.forEach(function(p){if(p.lat!=null&&(rid[p.id]||pid[p.id]))pts.push([p.lat,p.lon]);});
+  if(pts.length)map.fitBounds(pts,{padding:[40,40]});
 }
-function setTab(v){document.querySelectorAll(".tab").forEach(function(t){t.setAttribute("aria-selected",String(t.getAttribute("data-view")===v));});}
-function select(id){
-  var p=place(id),m=markers[id];if(!p)return;
-  if(!m){st.cats[ck(p.cat)]=true;renderLegend();renderMarkers();m=markers[id];}
-  st.sel=id;
-  if(window.matchMedia("(max-width: 899px)").matches){var box=$("map");if(box.scrollIntoView)box.scrollIntoView({block:"start",behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});}
-  map.setView([p.lat,p.lon],Math.max(map.getZoom(),15));
-  if(m)setTimeout(function(){m.openPopup();},250);
-}
-function renderLegend(){
-  var box=$("legend");box.textContent="";
-  var present={};S.places.forEach(function(p){present[ck(p.cat)]=true;});
-  Object.keys(CATS).forEach(function(k){if(!present[k])return;
-    box.appendChild(el("button",{"class":"chip","aria-pressed":String(!!st.cats[k]),style:"--c:"+catColor(k),onclick:function(){st.cats[k]=!st.cats[k];renderLegend();renderMarkers();}},[el("span",{"class":"dot"}),CATS[k]]));});
-}
+function focusPlace(id){var p=place(id);if(!p)return;$("where").scrollIntoView();
+  setTimeout(function(){map.invalidateSize();map.setView([p.lat,p.lon],Math.max(map.getZoom(),15));setTimeout(function(){if(markers[id])markers[id].openPopup();},300);},350);}
 
-/* ---------- days ---------- */
-function renderDayChips(){
-  var box=$("dayChips");box.textContent="";
-  box.appendChild(el("button",{"class":"chip","aria-pressed":String(st.day==="all"),style:"--c:var(--ink)",text:"Whole trip",onclick:function(){st.day="all";renderAll();fitDay();}}));
-  S.days.forEach(function(d){box.appendChild(el("button",{"class":"chip","aria-pressed":String(st.day===d.id),style:"--c:var(--"+d.id+")",text:d.short,onclick:function(){st.day=st.day===d.id?"all":d.id;renderAll();fitDay();}}));});
-}
-function renderDays(){
-  var box=$("days");box.textContent="";
-  S.days.forEach(function(d){
-    if(st.day!=="all"&&st.day!==d.id)return;
-    var card=el("article",{"class":"card day",style:"--c:var(--"+d.id+")",id:"day-"+d.id});
-    card.appendChild(el("header",null,[el("h3",{text:d.title}),el("span",{"class":"date",text:d.label})]));
-    if(d.pass)card.appendChild(el("span",{"class":"pass",text:d.pass+" pass"}));
-    card.appendChild(el("div",{"class":"getthere"},[el("b",{text:"Getting to the lifts"}),d.getThere]));
-    var ol=el("ol");d.plan.forEach(function(t){ol.appendChild(el("li",{text:t}));});card.appendChild(ol);
-    if(d.cutoff)card.appendChild(el("div",{"class":"cutoff",text:d.cutoff}));
-    var stops=el("div",{"class":"stops"});
-    var items=S.plan.filter(function(x){return x.day===d.id;});
-    items.sort(function(a,b){return SLOTS.indexOf(a.slot)-SLOTS.indexOf(b.slot);});
-    if(!items.length)stops.appendChild(el("p",{"class":"empty",text:"No food or stops planned yet."}));
-    items.forEach(function(x){var p=place(x.placeId);if(!p)return;
-      var mid=el("div",null,[el("button",{"class":"nm",onclick:function(){select(p.id);}},[el("span",{"class":"sw",style:"--c:"+catColor(p.cat)}),p.name])]);
-      if(x.note)mid.appendChild(el("div",{"class":"nt",text:x.note}));
-      stops.appendChild(el("div",{"class":"stop"},[el("span",{"class":"slot",text:x.slot}),mid,el("a",{href:mapsUrl(p),target:"_blank",rel:"noopener","class":"meta",text:"Google Maps"})]));});
-    card.appendChild(stops);box.appendChild(card);
-  });
-}
-function renderPlaceFilter(){
-  var box=$("placeFilter");box.textContent="";
-  var opts=[["all","All"]];var present={};S.places.forEach(function(p){present[ck(p.cat)]=true;});
-  Object.keys(CATS).forEach(function(k){if(present[k]&&k!=="stay")opts.push([k,CATS[k]]);});
-  opts.forEach(function(o){box.appendChild(el("button",{"class":"chip","aria-pressed":String(st.pfilter===o[0]),style:"--c:"+(o[0]==="all"?"var(--ink)":catColor(o[0])),text:o[1],onclick:function(){st.pfilter=o[0];renderPlaceFilter();renderPlaces();}}));});
-}
-function renderPlaces(){
-  var box=$("placeList");box.textContent="";
-  Object.keys(CATS).forEach(function(k){
-    if(k==="stay")return;if(st.pfilter!=="all"&&st.pfilter!==k)return;
-    var list=S.places.filter(function(p){return ck(p.cat)===k;});if(!list.length)return;
-    var g=el("div",{"class":"group"},[el("h3",{text:CATS[k]})]);
-    list.forEach(function(p){
-      var left=el("div",null,[el("button",{"class":"nm",onclick:function(){select(p.id);}},[el("span",{"class":"sw",style:"--c:"+catColor(p.cat)}),p.name])]);
-      if(p.note)left.appendChild(el("p",{text:p.note}));
-      if(p.hours)left.appendChild(el("p",{text:"Hours: "+p.hours}));
-      g.appendChild(el("div",{"class":"prow"},[left,el("a",{href:mapsUrl(p),target:"_blank",rel:"noopener","class":"meta",text:"Google Maps"})]));
-    });
-    box.appendChild(g);
-  });
-}
-function renderAll(){renderDayChips();renderLegend();renderMarkers();renderDays();renderPlaceFilter();renderPlaces();}
-document.querySelectorAll(".tab").forEach(function(t){t.addEventListener("click",function(){var v=t.getAttribute("data-view");map.fitBounds(BOUNDS[v],{padding:[10,10]});setTab(v);});});
-renderAll();
+$("copyBtn").addEventListener("click",function(){var url=location.href.split("#")[0],b=this;
+  if(navigator.share){navigator.share({title:document.title,url:url}).catch(function(){});return;}
+  if(navigator.clipboard)navigator.clipboard.writeText(url).then(function(){b.querySelector("span").textContent="Link copied";setTimeout(function(){b.querySelector("span").textContent="Share";},2000);});});
+
+renderHero();renderDayTabs();renderDays();renderCatTabs();renderGrid();renderMarkers();
 setTimeout(function(){map.invalidateSize();},200);
 window.addEventListener("resize",function(){map.invalidateSize();});
 })();
-
 </script>
 </body>
 </html>
