@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Châtel ski week · Jan 14–19, 2027</title>
+<title>Châtel like a local · Jan 14–19, 2027</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -89,10 +89,10 @@ main{max-width:860px;margin:0 auto;padding:20px 16px 40px}
 .get svg{flex:none;width:20px;height:20px;margin-top:2px;color:var(--muted)}
 .get b{display:block;font-size:13px;color:var(--muted);font-weight:600}
 .stops{list-style:none;margin:14px 0 0;padding:0;position:relative}
-.stops::before{content:"";position:absolute;left:15px;top:14px;bottom:14px;border-left:3px dashed var(--line)}
+.stops::before{content:"";position:absolute;left:37px;top:14px;bottom:14px;border-left:3px dashed var(--line)}
 .stop{position:relative}
-.stop button{display:grid;grid-template-columns:32px 1fr auto;gap:12px;align-items:start;width:100%;text-align:left;background:none;border:0;padding:8px 6px 8px 0;border-radius:8px}
-.stop button:hover,.stop.flash button{background:var(--soft)}
+.stop button.row{display:grid;grid-template-columns:32px 1fr auto;gap:12px;align-items:start;width:100%;text-align:left;background:none;border:0;padding:8px 6px 8px 0;border-radius:8px}
+.stop button.row:hover,.stop.flash button.row{background:var(--soft)}
 .num{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--c);color:#fff;font:700 16px/1 "Barlow Condensed",sans-serif;border:3px solid var(--paper);position:relative;z-index:1}
 .mon .num{color:var(--snow)}
 .stop .slot{font:700 13px/1.2 "Barlow Condensed",sans-serif;letter-spacing:.04em;color:var(--muted)}
@@ -117,12 +117,42 @@ h2.sec{font:800 26px/1.1 "Barlow Condensed","Arial Narrow",sans-serif;margin:34p
 .know li{margin:4px 0}
 .know a{color:var(--sat);font-weight:600}
 footer{color:var(--muted);font-size:13px;max-width:860px;margin:0 auto;padding:0 16px 40px}
+.stop{display:grid;grid-template-columns:22px 1fr;align-items:start}
+.grip{cursor:grab;touch-action:none;color:var(--muted);display:grid;place-items:center;height:48px;border:0;background:none;padding:0}
+.grip svg{width:16px;height:16px}
+.stop.sortable-ghost{opacity:.35}
+.stop.sortable-chosen button.row{background:var(--soft)}
+.stop .acts{display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding-top:4px}
+.stop .acts span{font-size:13px;color:var(--sat);font-weight:600;cursor:pointer}
+.stops{min-height:44px}
+.stops:empty::after{content:"Drag a stop or idea here";display:block;color:var(--muted);font-size:14px;padding:12px 0 12px 44px}
+.idea .num{width:22px;height:22px;margin:5px;border:3px solid var(--muted);background:var(--paper)}
+.editor{margin:6px 0 10px 0;padding:12px;border:1.5px solid var(--line);border-radius:10px;background:var(--snow);display:grid;gap:8px}
+.editor label{display:grid;gap:2px;font-size:13px;font-weight:600;color:var(--muted)}
+.editor input,.editor select{font:inherit;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:6px;padding:7px 9px;width:100%}
+.editor .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.editor .btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{border:1.5px solid var(--line);background:var(--paper);border-radius:8px;padding:7px 14px;font-weight:600;font-size:14px}
+.btn.go{background:var(--sat);border-color:var(--sat);color:#fff}
+.btn.del{color:var(--sun);border-color:transparent;background:none;margin-left:auto}
+.addbtn{margin:8px 0 0 22px;background:none;border:1.5px dashed var(--line);border-radius:8px;padding:7px 12px;font-weight:600;font-size:14px;color:var(--sat)}
+.addbtn[hidden]{display:none}
+.lookup{display:flex;gap:8px}
+.lookup input{flex:1}
+.msg{font-size:13px;color:var(--muted)}
+.msg.err{color:var(--sun)}
+.preview{font-size:14px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--snow);padding:8px 14px;border-radius:999px;font-size:14px;font-weight:600;z-index:80;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.toast[hidden]{display:none}
+.banner{background:var(--soft);border-radius:8px;padding:8px 12px;font-size:14px;margin:0 0 14px}
+.banner[hidden]{display:none}
+
 </style>
 </head>
 <body class="pinned">
 <div class="mapblock" id="mapblock">
   <div class="bar">
-    <h1>Châtel ski week<small>Jan 14–19 · Joe, Tom and Mike · 4 ski days</small></h1>
+    <h1>Châtel like a local<small>Jan 14–19 · Joe, Tom and Mike · 4 ski days, zero tourist traps</small></h1>
     <button class="pinbtn" id="pinBtn" type="button" aria-pressed="true"></button>
   </div>
   <div id="map" aria-label="Trip map"></div>
@@ -130,11 +160,13 @@ footer{color:var(--muted);font-size:13px;max-width:860px;margin:0 auto;padding:0
 </div>
 
 <main>
-  <p class="hint" id="hint">Numbered pins are itinerary stops. Tap a stop below to find it on the map, or tap a day sign to show only that day.</p>
+  <div class="banner" id="banner" hidden></div>
+  <p class="hint" id="hint">Farm cheese, buvettes, a zipline and the bars the ski instructors drink in. Numbered pins are the plan; drag the ⋮⋮ handle to shuffle things around, tap a stop to find it on the map.</p>
   <div id="days"></div>
 
-  <h2 class="sec">Other places on the map</h2>
-  <div class="others" id="others"></div>
+  <h2 class="sec">Ideas</h2>
+  <p class="hint">More spots worth knowing about. Drag one into a day if you want to swap it in.</p>
+  <div class="day ideas"><div class="body"><ol class="stops" id="ideas" data-day=""></ol><button class="addbtn" type="button" data-add="">+ Add an idea from a link</button><div id="add-ideas"></div></div></div>
 
   <h2 class="sec">Things to know</h2>
   <div class="know">
@@ -149,47 +181,89 @@ footer{color:var(--muted);font-size:13px;max-width:860px;margin:0 auto;padding:0
       <li>Rentals through Skimium. Tom still needs to book.</li>
       <li><a href="https://www.skipass-chatel.com/en/tarifs-hiver" target="_blank" rel="noopener">Lift passes</a> · <a href="https://www.skimium.co.uk/" target="_blank" rel="noopener">Skimium</a></li></ul></div>
     <div><h3>House rules</h3><ul>
-      <li>Book dinners early; restaurants filled up last year.</li>
-      <li>At least one raclette night.</li>
+      <li>Book dinners early; the good local places filled up last year.</li>
+      <li>At least one raclette night (we’re doing two: Café Zeph Friday, farm cheese at the apartment Sunday).</li>
       <li>Swim briefs at Forme d’O (no board shorts). Closed Mondays.</li>
       <li>Join the Airbnb reservation with Joe’s link from his email or the group text.</li></ul></div>
   </div>
 </main>
+<div class="toast" id="toast" role="status" hidden></div>
 <footer>Garden-level apartment, 1124 Route de la Béchigne, Châtel. Hours from Google listings checked Nov 2026; winter hours can differ. Shuttle times from the 2025/26 season. Map © OpenStreetMap contributors, OpenTopoMap (CC-BY-SA); ski runs © OpenSnowMap.</footer>
 
-<script type="application/json" id="state">{"v": 1, "places": [{"id": "airbnb", "name": "Our Airbnb", "cat": "stay", "lat": 46.26925, "lon": 6.83526, "note": "1124 Route de la Béchigne, apartment 2 (garden level). The Super-Châtel gondola is about 650 m away.", "pid": "ChIJicsP09WjjkcR8Go4i3A58hY", "lab": "Our Airbnb"}, {"id": "gondola", "name": "Super-Châtel gondola", "cat": "lift", "lat": 46.26662, "lon": 6.84241, "note": "In the village center. Friday and Sunday start here.", "cid": "16092782760028794647", "lab": "Super-Châtel gondola"}, {"id": "vonnes", "name": "Vonnes lifts (Portes du Soleil and Gabelou chairs)", "cat": "lift", "lat": 46.25524, "lon": 6.84173, "note": "Chairs linking the Super-Châtel side and the Linga side. Line 4 bus.", "cid": "2053964651691134420", "lab": "Vonnes"}, {"id": "linga", "name": "Linga chair", "cat": "lift", "lat": 46.2389, "lon": 6.81807, "note": "New 6-seat chair. Lines 1, 2 and 3 stop at the Linga bus station.", "cid": "8230850199082031264", "lab": "Linga"}, {"id": "prelajoux", "name": "Pré-la-Joux (Pierre Longue chair)", "cat": "lift", "lat": 46.23728, "lon": 6.7931, "note": "End of Line 1. Pierre Longue chair, then Rochassons, toward Plaine Dranse and Les Lindarets.", "cid": "313600906860938480", "lab": "Pré-la-Joux"}, {"id": "torgon", "name": "Torgon, Tronchey chair", "cat": "lift", "lat": 46.30537, "lon": 6.85111, "note": "Swiss side. Reached from Super-Châtel over the Tour de Don drag.", "cid": "10293127186672645031", "lab": "Torgon", "side": "r"}, {"id": "panthiaz", "name": "La Panthiaz gondola (La Chapelle)", "cat": "lift", "lat": 46.29113, "lon": 6.79968, "note": "Braitaz sector of La Chapelle d’Abondance.", "cid": "11621054028585059947", "lab": "La Panthiaz"}, {"id": "lindarets", "name": "Lindarets chair (Avoriaz side)", "cat": "lift", "lat": 46.20771, "lon": 6.77774, "note": "Portes du Soleil pass only. Chaux Fleurie chair brings you back toward Châtel.", "cid": "14469562247480512654", "lab": "Les Lindarets"}, {"id": "sherpa", "name": "Sherpa supermarket", "cat": "grocery", "lat": 46.26368, "lon": 6.84026, "note": "Main grocery in the village, next to Forme d’O. Local cheese counter and a fresh orange juice machine. Closes for lunch.", "pid": "ChIJjVZGn9GjjkcRv5dx9Bzzq04", "hours": "Daily 7:00 AM–12:30 PM, 3:00–7:15 PM"}, {"id": "epicurie", "name": "L’Épicurie des Alpes", "cat": "grocery", "lat": 46.27286, "lon": 6.8381, "note": "Deli about 400 m from the Airbnb. Regulars order their raclette cheese and ready meals here.", "pid": "ChIJX6WqZNqjjkcRLWRI3gTyWHc", "hours": "Wed–Sat 9:00 AM–12:30 PM, 3:00–7:00 PM"}, {"id": "sosse", "name": "La Cave à Sosse", "cat": "grocery", "lat": 46.26481, "lon": 6.84062, "note": "Cheese, sausage and wine shop. Highly rated for raclette supplies.", "pid": "ChIJF1uWaNCjjkcRLtqoYIgkYUU", "hours": "Listed Sat–Sun 10:00 AM–6:00 PM (winter hours may be longer)"}, {"id": "fermelinga", "name": "La Ferme du Linga", "cat": "grocery", "lat": 46.25493, "lon": 6.82005, "note": "Farm shop: Abondance, raclette and goat cheese made on site. Cash only.", "pid": "ChIJXU97FiyhjkcRT1mowWHalgY", "hours": "Tue, Fri, Sun 6:00–7:00 PM"}, {"id": "intermarche", "name": "Intermarché (toward La Chapelle)", "cat": "grocery", "lat": 46.27761, "lon": 6.82291, "note": "Biggest supermarket nearby, roughly 1.5 km from the Airbnb. Fine for a big shop if you don’t mind the walk with bags.", "pid": "ChIJEW7PD0qgjkcRD3d-rLXXER0", "hours": "Mon–Sat 8:30 AM–7:15 PM, Sun 9:00 AM–12:00 PM"}, {"id": "grenier", "name": "Le Grenier Al’Pain", "cat": "bakery", "lat": 46.2659, "lon": 6.84173, "note": "Bakery that opens at 5:30 AM. Good sandwiches to carry on the mountain.", "pid": "ChIJ830SStCjjkcR_IHn2JUcxQU", "hours": "Daily 5:30 AM–8:00 PM"}, {"id": "grillet", "name": "Boulangerie Grillet", "cat": "bakery", "lat": 46.26689, "lon": 6.84151, "note": "Classic village-center bakery. Eclairs and fruit tarts.", "pid": "ChIJGxqAvNGjjkcRl_ezyqhImsg", "hours": "Daily 7:00 AM–12:30 PM, 3:00–7:00 PM"}, {"id": "bistrom", "name": "BistroM", "cat": "dinner", "lat": 46.26359, "lon": 6.83899, "note": "Beef fondue, tartiflette, slow-cooked lamb. Near Sherpa, so it fits a grocery stop.", "pid": "ChIJbRA0FjujjkcRiVl6eQopDiM", "hours": "Dinner Mon–Thu 6:00–10:00 PM"}, {"id": "renard", "name": "Le Renard", "cat": "dinner", "lat": 46.25795, "lon": 6.82861, "note": "Savoyard menu, Anglo-French owners, cozy room. On the way to Linga; check the last shuttle home.", "pid": "ChIJVSgRRWehjkcRbqDEgCRizrY", "hours": "Dinner Thu–Sat 7:00–9:00 PM"}, {"id": "zeph", "name": "Café Zeph", "cat": "dinner", "lat": 46.26704, "lon": 6.8413, "note": "Raclette at the table; reviewers call it one of the best they’ve had. Also burgers and steak. Book ahead.", "pid": "ChIJSZSqvNGjjkcRTnUp1aioQDA", "hours": "Dinner 5:30–10:00 PM; closed Wednesday, no dinner Tuesday"}, {"id": "cheminee", "name": "La Cheminée", "cat": "dinner", "lat": 46.26709, "lon": 6.8419, "note": "Côte de bœuf and pork ribs; strong service reviews.", "pid": "ChIJMQlKv9GjjkcRDayWY84PCP0", "hours": "Dinner daily from 7:00 PM"}, {"id": "belle", "name": "La Belle Rencontre", "cat": "dinner", "lat": 46.26718, "lon": 6.84197, "note": "Fondue specialist (truffle and Black Angus versions). One owner runs the whole room, so book.", "pid": "ChIJx5UfhK2jjkcRLguGtiB3mQY", "hours": "Daily 11:30 AM–11:00 PM"}, {"id": "chesery", "name": "Le Chesery", "cat": "dinner", "lat": 46.2674, "lon": 6.84143, "note": "Fondue and steak in the center. Mixed service reviews.", "pid": "ChIJvbp3mdGjjkcRbrD17XOrjjU", "hours": "Tue–Sat; closed Sun–Mon"}, {"id": "corbeau", "name": "Buvette du Corbeau (Morgins)", "cat": "lunch", "lat": 46.24616, "lon": 6.86097, "note": "Corbeau sector of Morgins. Soup, cheese tarts, vin chaud, sunny terrace.", "pid": "ChIJi1NthpCjjkcRcPeAuXMLngk", "lab": "Buvette du Corbeau"}, {"id": "fermepistes", "name": "La Ferme des Pistes (Linga)", "cat": "lunch", "lat": 46.2396, "lon": 6.81953, "note": "Traditional mountain restaurant; regulars rave about the tartiflette. Cash only.", "pid": "ChIJhaB9i1OhjkcRhiZMH-we8Co", "hours": "Daily 9:00 AM–5:00 PM", "lab": "Ferme des Pistes"}, {"id": "crepy", "name": "Chez Crépy (Plaine Dranse)", "cat": "lunch", "lat": 46.21747, "lon": 6.79421, "note": "Best sit-down lunch on the Châtel side by most reviews. Order the berthoud.", "pid": "ChIJ284ib-qmjkcRkGfrBtscry4", "hours": "Daily 9:00 AM–5:00 PM", "lab": "Chez Crépy"}, {"id": "folie", "name": "La Folie des Neiges (Plaine Dranse)", "cat": "lunch", "lat": 46.2188, "lon": 6.79221, "note": "Burgers and homemade fries, first terrace to get sun, happy hour from 3:30.", "pid": "ChIJVVW5pNGjjkcRyZqO7h3KpBo", "lab": "Folie des Neiges"}, {"id": "bourri", "name": "Buvette d’alpage La Bourri (Torgon)", "cat": "lunch", "lat": 46.30544, "lon": 6.83638, "note": "Alpage de Recon. Fondue and real coffee. Confirm it’s reachable on skis from the Torgon lifts before counting on it.", "pid": "ChIJ64J7cfmhjkcR1qMIozJ0UhY", "hours": "Fri–Sun 9:30 AM–6:00 PM", "lab": "La Bourri"}, {"id": "tseudron", "name": "Le Tseudron (Torgon)", "cat": "lunch", "lat": 46.30609, "lon": 6.85093, "note": "Self-service at the bottom of the Tronchey chair. Backup if La Bourri doesn’t work.", "pid": "ChIJcYcoJ6SYjkcRZBeCzcEkEgQ", "lab": "Le Tseudron"}, {"id": "mamos", "name": "Mamo’s Café (Les Lindarets)", "cat": "lunch", "lat": 46.20796, "lon": 6.77643, "note": "Best-reviewed burgers and galettes in the valley.", "pid": "ChIJcU8hpuKmjkcReMQw4e1Fz1g", "hours": "Daily 9:00 AM–5:00 PM", "lab": "Mamo’s Café"}, {"id": "petitlindaret", "name": "Le Petit Lindaret (Les Lindarets)", "cat": "lunch", "lat": 46.21096, "lon": 6.77408, "note": "Traditional room; the croûte and daily specials get the praise.", "pid": "ChIJcU8hpuKmjkcRDC4V_ChrS-Q", "hours": "Daily 9:00 AM–5:00 PM", "lab": "Petit Lindaret"}, {"id": "godille", "name": "La Godille", "cat": "bar", "lat": 46.26713, "lon": 6.84146, "note": "Family-run bar in the center with local Brasserie du Mont Blanc beers and a terrace.", "pid": "ChIJJzb-vNGjjkcRZ_CaGQHfrZo"}, {"id": "avalanche", "name": "Avalanche Pub", "cat": "bar", "lat": 46.26532, "lon": 6.84054, "note": "Sports bar with pool table and a balcony view. Skip the food.", "pid": "ChIJGfxIrNGjjkcR5uA5DpGx-do"}, {"id": "formedo", "name": "Forme d’O", "cat": "activity", "lat": 46.26309, "lon": 6.83975, "note": "Indoor and outdoor pools, saunas, hammams. Swim briefs required; they sell them at the desk at a markup.", "cid": "4030432019564530472", "hours": "Tue–Sun 12:00–7:00 PM; closed Monday"}, {"id": "richard", "name": "Richard Sports (Skimium), village", "cat": "rental", "lat": 46.26623, "lon": 6.84087, "note": "Skimium shop in the center. The listing shows Thursday closed, so confirm pickup times for arrival day.", "pid": "ChIJtVesqNGjjkcRAmoCsYnr6d8"}, {"id": "skimiumlinga", "name": "Skimium Sports Liberté, Linga", "cat": "rental", "lat": 46.25529, "lon": 6.81962, "note": "Skimium shop at Linga, open daily.", "pid": "ChIJpcftYV2hjkcRvFuc7I-VydY", "hours": "Daily 9:00 AM–7:00 PM"}], "days": [{"id": "thu", "short": "Thu 14", "label": "Thursday, January 14", "title": "Arrive", "pass": "", "getThere": "Shared Chatel Transfers van from Geneva at 3:40 PM, about 1h40 to Châtel. Sherpa is about 700 m from the Airbnb and closes at 7:15 PM, so shop on the way in or right after drop-off.", "plan": ["Meet at a coffee shop outside baggage claim in Geneva arrivals (Mike 1:50 PM, Tom 1:25 PM, Joe 2:40 PM).", "Check in at the Airbnb.", "Groceries for breakfasts and the week."], "cutoff": "", "route": []}, {"id": "fri", "short": "Fri 15", "label": "Friday, January 15", "title": "Super-Châtel and Morgins", "pass": "Liberté", "getThere": "Walk to the Super-Châtel gondola, about 650 m (roughly 10 minutes in boots). Coming home, ski back toward the village if the snow allows, or ride the gondola down.", "plan": ["Super-Châtel gondola; warm up on Morclan and Conche.", "Chalet Neuf drag into the Corbeau sector of Morgins.", "Short day for jet lag."], "cutoff": "Stay on the Corbeau side of Morgins; the rest of Morgins isn’t on the Liberté pass.", "route": ["airbnb", "gondola", "corbeau"]}, {"id": "sat", "short": "Sat 16", "label": "Saturday, January 16", "title": "Linga and Pré-la-Joux", "pass": "Liberté", "getThere": "Line 3 shuttle (Centre village / Béchigne / Jardy / Linga) from the Béchigne stop to the Linga bus station. It ran every 15 minutes from 8:30 AM last season. Home the same way.", "plan": ["Linga chair; steepest terrain on the Liberté pass.", "Ski across to Pré-la-Joux; afternoon laps on Pierre Longue and Rochassons.", "Saturday is chalet changeover day, usually the quietest on the slopes."], "cutoff": "Don’t ski down the far side of Rochassons toward Les Lindarets today; that’s off the Liberté pass.", "route": ["airbnb", "linga", "prelajoux"]}, {"id": "sun", "short": "Sun 17", "label": "Sunday, January 17", "title": "Torgon and La Chapelle traverse", "pass": "Liberté", "getThere": "Walk to the Super-Châtel gondola, about 650 m. Start early; this is the longest day.", "plan": ["Super-Châtel gondola, then the Tour de Don drag over into Torgon.", "Djeu des Têtes and Conche 2000 drags toward La Chapelle.", "La Panthiaz gondola into the Braitaz sector."], "cutoff": "Turn for home by about 2:00 PM. The way back depends on drag lifts. If snow is thin at this low altitude, swap the day for Super-Châtel and Barbossine.", "route": ["airbnb", "gondola", "torgon", "panthiaz"]}, {"id": "mon", "short": "Mon 18", "label": "Monday, January 18", "title": "Avoriaz via Les Lindarets", "pass": "Portes du Soleil", "getThere": "Walk to the village center and take Line 1 to Pré-la-Joux; it ran every 15 minutes from 8:00 AM last season. Line 3 to Linga also works if you ski across.", "plan": ["At Pré-la-Joux by 8:45 AM. Pierre Longue chair, then Rochassons.", "Ski down to Les Lindarets, then the Lindarets chair up to Avoriaz.", "Home: ski back to Les Lindarets, Chaux Fleurie chair up, Rochassons down."], "cutoff": "Be on the Chaux Fleurie chair at Les Lindarets by about 3:15 PM; check the posted last-lift time. Pack Sunday night: Mike’s van leaves at 5:05 AM Tuesday.", "route": ["airbnb", "prelajoux", "lindarets", "mamos"]}], "plan": [{"day": "thu", "slot": "Groceries", "placeId": "sherpa", "note": "Closes 7:15 PM"}, {"day": "thu", "slot": "Dinner", "placeId": "bistrom", "note": ""}, {"day": "fri", "slot": "Lunch", "placeId": "corbeau", "note": ""}, {"day": "fri", "slot": "Après", "placeId": "formedo", "note": "Bring swim briefs"}, {"day": "fri", "slot": "Dinner", "placeId": "renard", "note": "Book ahead"}, {"day": "sat", "slot": "Lunch", "placeId": "fermepistes", "note": "Bring cash"}, {"day": "sat", "slot": "Après", "placeId": "godille", "note": ""}, {"day": "sat", "slot": "Dinner", "placeId": "zeph", "note": "Raclette night. Book ahead."}, {"day": "sun", "slot": "Lunch", "placeId": "bourri", "note": "Backup: Le Tseudron at the Torgon base"}, {"day": "sun", "slot": "Dinner", "placeId": "cheminee", "note": ""}, {"day": "mon", "slot": "Breakfast", "placeId": "grenier", "note": "Grab sandwiches"}, {"day": "mon", "slot": "Lunch", "placeId": "mamos", "note": ""}, {"day": "mon", "slot": "Dinner", "placeId": "belle", "note": "Early dinner, then pack"}]}</script>
+<script type="application/json" id="state">{"v": 1, "places": [{"id": "airbnb", "name": "Our Airbnb", "cat": "stay", "lat": 46.26925, "lon": 6.83526, "note": "1124 Route de la Béchigne, apartment 2, garden level. A 10-minute boot walk to the gondola, or hop on the Line 3 shuttle.", "pid": "ChIJicsP09WjjkcR8Go4i3A58hY", "lab": "Our Airbnb"}, {"id": "gondola", "name": "Super-Châtel gondola", "cat": "lift", "lat": 46.26662, "lon": 6.84241, "note": "The front door to the mountain, right in the village. Morning queues clear fast in January.", "cid": "16092782760028794647", "lab": "Super-Châtel gondola"}, {"id": "vonnes", "name": "Vonnes lifts (Portes du Soleil and Gabelou chairs)", "cat": "lift", "lat": 46.25524, "lon": 6.84173, "note": "Chairs linking Super-Châtel and Linga. Handy if you get split up.", "cid": "2053964651691134420", "lab": "Vonnes"}, {"id": "linga", "name": "Linga chair", "cat": "lift", "lat": 46.2389, "lon": 6.81807, "note": "Brand-new 6-seat chair, about six minutes to the top. The steepest, most fun terrain on the Liberté pass.", "cid": "8230850199082031264", "lab": "Linga"}, {"id": "prelajoux", "name": "Pré-la-Joux (Pierre Longue chair)", "cat": "lift", "lat": 46.23728, "lon": 6.7931, "note": "Base of the Pierre Longue chair and the end of the Line 1 shuttle. Gateway to Plaine Dranse and Avoriaz.", "cid": "313600906860938480", "lab": "Pré-la-Joux"}, {"id": "torgon", "name": "Torgon, Tronchey chair", "cat": "lift", "lat": 46.30537, "lon": 6.85111, "note": "The quiet Swiss side. Lake Geneva views off the top and barely anyone on the runs.", "cid": "10293127186672645031", "lab": "Torgon", "side": "r"}, {"id": "panthiaz", "name": "La Panthiaz gondola (La Chapelle)", "cat": "lift", "lat": 46.29113, "lon": 6.79968, "note": "La Chapelle’s gondola. Feels like a different, sleepier resort.", "cid": "11621054028585059947", "lab": "La Panthiaz"}, {"id": "lindarets", "name": "Lindarets chair (Avoriaz side)", "cat": "lift", "lat": 46.20771, "lon": 6.77774, "note": "Portes du Soleil pass only. Chaux Fleurie is your ride home, so watch the clock.", "cid": "14469562247480512654", "lab": "Les Lindarets"}, {"id": "sherpa", "name": "Sherpa supermarket", "cat": "grocery", "lat": 46.26368, "lon": 6.84026, "note": "The village supermarket. Hit the cheese counter and the fresh orange juice machine. Closed 12:30–3:00 like a proper French shop.", "pid": "ChIJjVZGn9GjjkcRv5dx9Bzzq04", "hours": "Daily 7:00 AM–12:30 PM, 3:00–7:15 PM"}, {"id": "epicurie", "name": "L’Épicurie des Alpes", "cat": "grocery", "lat": 46.27286, "lon": 6.8381, "note": "Our neighbor, about 400 m away. Locals order their raclette cheese and ready-made Savoyard dishes here.", "pid": "ChIJX6WqZNqjjkcRLWRI3gTyWHc", "hours": "Wed–Sat 9:00 AM–12:30 PM, 3:00–7:00 PM"}, {"id": "sosse", "name": "La Cave à Sosse", "cat": "grocery", "lat": 46.26481, "lon": 6.84062, "note": "François’s cheese, sausage and wine cave. Ten minutes of chatting with him is half the fun. Open Sundays, which is when we need him.", "pid": "ChIJF1uWaNCjjkcRLtqoYIgkYUU", "hours": "Listed Sat–Sun 10:00 AM–6:00 PM (winter hours may be longer)"}, {"id": "fermelinga", "name": "La Ferme du Linga", "cat": "grocery", "lat": 46.25493, "lon": 6.82005, "note": "The real thing: Abondance and raclette made by the family that milks the cows. Cash only, tiny evening window (about 6–7 PM Tue, Fri, Sun).", "pid": "ChIJXU97FiyhjkcRT1mowWHalgY", "hours": "Tue, Fri, Sun 6:00–7:00 PM"}, {"id": "intermarche", "name": "Intermarché (toward La Chapelle)", "cat": "grocery", "lat": 46.27761, "lon": 6.82291, "note": "Big supermarket about 1.5 km out. Only worth it for a serious stock-up.", "pid": "ChIJEW7PD0qgjkcRD3d-rLXXER0", "hours": "Mon–Sat 8:30 AM–7:15 PM, Sun 9:00 AM–12:00 PM"}, {"id": "grenier", "name": "Le Grenier Al’Pain", "cat": "bakery", "lat": 46.2659, "lon": 6.84173, "note": "Opens at 5:30 AM and bakes on site. Grab their sandwiches for the hill.", "pid": "ChIJ830SStCjjkcR_IHn2JUcxQU", "hours": "Daily 5:30 AM–8:00 PM"}, {"id": "grillet", "name": "Boulangerie Grillet", "cat": "bakery", "lat": 46.26689, "lon": 6.84151, "note": "Old-school village bakery. Eclairs for the walk home.", "pid": "ChIJGxqAvNGjjkcRl_ezyqhImsg", "hours": "Daily 7:00 AM–12:30 PM, 3:00–7:00 PM"}, {"id": "bistrom", "name": "BistroM", "cat": "dinner", "lat": 46.26359, "lon": 6.83899, "note": "Casual bistro near Sherpa: beef fondue, tartiflette, slow-cooked lamb. Dinner Monday to Thursday only.", "pid": "ChIJbRA0FjujjkcRiVl6eQopDiM", "hours": "Dinner Mon–Thu 6:00–10:00 PM"}, {"id": "renard", "name": "Le Renard", "cat": "dinner", "lat": 46.25795, "lon": 6.82861, "note": "Savoyard cooking in a cozy wooden room, run by a British chef and his French wife (plus a very friendly golden retriever). Book.", "pid": "ChIJVSgRRWehjkcRbqDEgCRizrY", "hours": "Dinner Thu–Sat 7:00–9:00 PM"}, {"id": "zeph", "name": "Café Zeph", "cat": "dinner", "lat": 46.26704, "lon": 6.8413, "note": "Raclette at the table in a building from 1788. The raclette night Joe asked for. Book ahead.", "pid": "ChIJSZSqvNGjjkcRTnUp1aioQDA", "hours": "Dinner 5:30–10:00 PM; closed Wednesday, no dinner Tuesday"}, {"id": "cheminee", "name": "La Cheminée", "cat": "dinner", "lat": 46.26709, "lon": 6.8419, "note": "Côte de bœuf and ribs if anyone needs a break from cheese.", "pid": "ChIJMQlKv9GjjkcRDayWY84PCP0", "hours": "Dinner daily from 7:00 PM"}, {"id": "belle", "name": "La Belle Rencontre", "cat": "dinner", "lat": 46.26718, "lon": 6.84197, "note": "Isabelle runs the whole place herself and blends her own fondue spices; try the truffle or Black Angus fondue. Book, and don’t be in a rush.", "pid": "ChIJx5UfhK2jjkcRLguGtiB3mQY", "hours": "Daily 11:30 AM–11:00 PM"}, {"id": "corbeau", "name": "Buvette du Corbeau (Morgins)", "cat": "lunch", "lat": 46.24616, "lon": 6.86097, "note": "A tiny buvette over the Swiss border in Morgins. Homemade soup, cheese tarts and vin chaud on a sunny terrace.", "pid": "ChIJi1NthpCjjkcRcPeAuXMLngk", "lab": "Buvette du Corbeau"}, {"id": "fermepistes", "name": "La Ferme des Pistes (Linga)", "cat": "lunch", "lat": 46.2396, "lon": 6.81953, "note": "Old farmhouse on the Linga slopes. The tartiflette is the reason to come. Cash only.", "pid": "ChIJhaB9i1OhjkcRhiZMH-we8Co", "hours": "Daily 9:00 AM–5:00 PM", "lab": "Ferme des Pistes"}, {"id": "crepy", "name": "Chez Crépy (Plaine Dranse)", "cat": "lunch", "lat": 46.21747, "lon": 6.79421, "note": "The sit-down lunch at Plaine Dranse, the big meeting spot. Order the berthoud (baked Abondance cheese).", "pid": "ChIJ284ib-qmjkcRkGfrBtscry4", "hours": "Daily 9:00 AM–5:00 PM", "lab": "Chez Crépy"}, {"id": "folie", "name": "La Folie des Neiges (Plaine Dranse)", "cat": "lunch", "lat": 46.2188, "lon": 6.79221, "note": "First terrace at Plaine Dranse to get sun. Burgers, homemade fries, happy hour from 3:30.", "pid": "ChIJVVW5pNGjjkcRyZqO7h3KpBo", "lab": "Folie des Neiges"}, {"id": "bourri", "name": "Buvette d’alpage La Bourri (Torgon)", "cat": "lunch", "lat": 46.30544, "lon": 6.83638, "note": "A little alpage hut above Torgon with great fondue and real coffee. Open Friday to Sunday. Check you can ski to it from the Torgon lifts.", "pid": "ChIJ64J7cfmhjkcR1qMIozJ0UhY", "hours": "Fri–Sun 9:30 AM–6:00 PM", "lab": "La Bourri"}, {"id": "tseudron", "name": "Le Tseudron (Torgon)", "cat": "lunch", "lat": 46.30609, "lon": 6.85093, "note": "Self-service at the Tronchey chair. The fallback if La Bourri doesn’t work.", "pid": "ChIJcYcoJ6SYjkcRZBeCzcEkEgQ", "lab": "Le Tseudron"}, {"id": "mamos", "name": "Mamo’s Café (Les Lindarets)", "cat": "lunch", "lat": 46.20796, "lon": 6.77643, "note": "Where people who ski here every year eat: best burgers and galettes in the valley.", "pid": "ChIJcU8hpuKmjkcReMQw4e1Fz1g", "hours": "Daily 9:00 AM–5:00 PM", "lab": "Mamo’s Café"}, {"id": "petitlindaret", "name": "Le Petit Lindaret (Les Lindarets)", "cat": "lunch", "lat": 46.21096, "lon": 6.77408, "note": "Traditional room in the Lindarets hamlet. Get the croûte.", "pid": "ChIJcU8hpuKmjkcRDC4V_ChrS-Q", "hours": "Daily 9:00 AM–5:00 PM", "lab": "Petit Lindaret"}, {"id": "godille", "name": "La Godille", "cat": "bar", "lat": 46.26713, "lon": 6.84146, "note": "The locals’ bar on the main street. Family-run, local Brasserie du Mont Blanc beers, people-watching from the terrace.", "pid": "ChIJJzb-vNGjjkcRZ_CaGQHfrZo"}, {"id": "formedo", "name": "Forme d’O", "cat": "activity", "lat": 46.26309, "lon": 6.83975, "note": "Indoor and outdoor pools, saunas, hammams. French pool rules: swim briefs only (they sell them at the desk). Closed Mondays.", "cid": "4030432019564530472", "hours": "Tue–Sun 12:00–7:00 PM; closed Monday"}, {"id": "richard", "name": "Richard Sports (Skimium), village", "cat": "rental", "lat": 46.26623, "lon": 6.84087, "note": "Skimium shop in the village. The listing shows Thursday closed, so check pickup for arrival day.", "pid": "ChIJtVesqNGjjkcRAmoCsYnr6d8"}, {"id": "skimiumlinga", "name": "Skimium Sports Liberté, Linga", "cat": "rental", "lat": 46.25529, "lon": 6.81962, "note": "Skimium shop at Linga, open daily.", "pid": "ChIJpcftYV2hjkcRvFuc7I-VydY", "hours": "Daily 9:00 AM–7:00 PM"}, {"id": "fiacre", "name": "Le Fiacre", "cat": "dinner", "lat": 46.266681, "lon": 6.841544, "pid": "ChIJbRqAvNGjjkcRcVbDrnngJXg", "note": "Family-run spot on the main street that locals have eaten at for years. Pizzas, burgers and big meat platters. Easy first night, but it fills up, so book."}, {"id": "escale", "name": "L’Escale (top of Super-Châtel)", "lab": "L’Escale", "cat": "lunch", "lat": 46.2678375, "lon": 6.8572551, "pid": "ChIJD1nF3s2jjkcRxOzq-aJse_M", "hours": "Daily 9:30 AM–5:00 PM", "note": "Huge sunny balcony right where the gondola drops you, looking at Mont de Grange. Lunch has gone more upscale lately, so we use it for the last-sun drink before skiing home."}, {"id": "canon", "name": "Le Canon", "cat": "bar", "lat": 46.266468, "lon": 6.8407512, "pid": "ChIJn5txzKmjjkcRN8u2p-qz9Is", "hours": "Mon, Thu–Sat 4:30–9:00 PM; Sun morning only; closed Tue–Wed", "note": "Tiny wine shop and bar run by a young sommelier. Ask for the local charcuterie board and whatever Savoie wine she’s pouring; there are local craft beers on tap too."}, {"id": "fantasticable", "name": "Fantasticable zipline", "lab": "Fantasticable", "cat": "activity", "lat": 46.211649, "lon": 6.7913183, "pid": "ChIJueuk-c2mjkcRbQ6k75C3rRM", "hours": "Winter 12:00–4:00 PM, last flight 4 PM (2026/27 dates not yet confirmed)", "note": "Fly across the whole Pré-la-Joux valley in a harness, solo or side by side, at close to 100 km/h. Starts at the top of Rochassons; your skis get sent down after you. Book a time slot online."}, {"id": "tinderets", "name": "Night snowshoe + fondue at Refuge des Tinderets", "lab": "Tinderets refuge", "cat": "activity", "lat": 46.2379671, "lon": 6.7528144, "pid": "ChIJW-iqC0unjkcRmjkPvw7PoZg", "note": "Guided snowshoe climb under the stars to a mountain refuge for fondue and a grolle (the local shared coffee). Last season it left from 105 route de Vonnes at 6:15 PM; about €30 plus roughly €35 cash for dinner. Check the ESI Pro Skiing schedule for our dates."}], "days": [{"id": "thu", "short": "Thu 14", "label": "Thursday, January 14", "title": "Land, shop, first beer", "pass": "", "getThere": "Shared Chatel Transfers van from Geneva at 3:40 PM, about 1h40. Drop bags, then walk the 700 m to Sherpa before it closes at 7:15 PM.", "plan": ["Meet at a coffee shop outside baggage claim in Geneva arrivals (Tom 1:25, Mike 1:50, Joe 2:40 PM).", "Check in, then groceries for breakfasts.", "First beer at La Godille, dinner at Le Fiacre."], "cutoff": "", "route": []}, {"id": "fri", "short": "Fri 15", "label": "Friday, January 15", "title": "Warm-up and a Swiss lunch", "pass": "Liberté", "getThere": "Walk to the Super-Châtel gondola, about 10 minutes in boots. Ski home if there’s snow to the village, or ride the gondola down.", "plan": ["Up the gondola, warm-up laps on Morclan and Conche.", "Chalet Neuf drag over the border into Morgins’ Corbeau sector for lunch.", "Last sun on L’Escale’s balcony, then pools and sauna at Forme d’O."], "cutoff": "Stay on the Corbeau side of Morgins; the rest isn’t on the Liberté pass.", "route": ["airbnb", "gondola", "corbeau"]}, {"id": "sat", "short": "Sat 16", "label": "Saturday, January 16", "title": "Steeps, zipline, wine bar", "pass": "Liberté", "getThere": "Line 3 shuttle from the Béchigne stop to the Linga lifts (every 15 minutes from 8:30 AM last season).", "plan": ["Linga chair for the steepest runs on our pass while everyone else is changing chalets.", "Tartiflette at La Ferme des Pistes, then over to Pré-la-Joux.", "Fly the Fantasticable across the valley, then Le Canon for charcuterie and local wine."], "cutoff": "Don’t ski down the far side of Rochassons toward Les Lindarets today; that’s off our pass.", "route": ["airbnb", "linga", "prelajoux"]}, {"id": "sun", "short": "Sun 17", "label": "Sunday, January 17", "title": "The quiet Swiss traverse", "pass": "Liberté", "getThere": "Walk to the Super-Châtel gondola and be on it early; this is the long day.", "plan": ["Tour de Don drag into Torgon for Lake Geneva views.", "Fondue at La Bourri, then on to La Chapelle’s Panthiaz gondola.", "Pick up farm cheese at La Ferme du Linga for a raclette night at the apartment."], "cutoff": "Head back by about 2:00 PM; the way home runs on drag lifts. Thin snow? Swap for Super-Châtel and Barbossine.", "route": ["airbnb", "gondola", "torgon", "panthiaz"]}, {"id": "mon", "short": "Mon 18", "label": "Monday, January 18", "title": "Avoriaz via Les Lindarets", "pass": "Portes du Soleil", "getThere": "Walk to the village center and take Line 1 to Pré-la-Joux (every 15 minutes from 8:00 AM last season).", "plan": ["Bakery sandwiches from Le Grenier, at Pré-la-Joux by 8:45 AM.", "Pierre Longue, Rochassons, then down to Les Lindarets and up into Avoriaz.", "Lunch at Mamo’s, home via Chaux Fleurie, then Isabelle’s fondue."], "cutoff": "Be on the Chaux Fleurie chair by about 3:15 PM, and pack Sunday night: Mike’s van leaves at 5:05 AM Tuesday.", "route": ["airbnb", "prelajoux", "lindarets", "mamos"]}], "plan": [{"day": "thu", "slot": "Groceries", "placeId": "sherpa", "note": "Closes 7:15 PM"}, {"day": "thu", "slot": "Après", "placeId": "godille", "note": "First beer"}, {"day": "thu", "slot": "Dinner", "placeId": "fiacre", "note": "Book ahead"}, {"day": "fri", "slot": "Lunch", "placeId": "corbeau", "note": ""}, {"day": "fri", "slot": "Après", "placeId": "escale", "note": "Last-sun drink, then ski down"}, {"day": "fri", "slot": "Après", "placeId": "formedo", "note": "Bring swim briefs"}, {"day": "fri", "slot": "Dinner", "placeId": "zeph", "note": "Raclette night. Book ahead."}, {"day": "sat", "slot": "Lunch", "placeId": "fermepistes", "note": "Bring cash"}, {"day": "sat", "slot": "Stop", "placeId": "fantasticable", "note": "Book a slot between 12 and 4"}, {"day": "sat", "slot": "Après", "placeId": "canon", "note": "Opens 4:30"}, {"day": "sat", "slot": "Dinner", "placeId": "renard", "note": "Book ahead"}, {"day": "sun", "slot": "Lunch", "placeId": "bourri", "note": "Backup: Le Tseudron"}, {"day": "sun", "slot": "Groceries", "placeId": "sosse", "note": "Sausage and wine for raclette"}, {"day": "sun", "slot": "Groceries", "placeId": "fermelinga", "note": "6–7 PM, cash only"}, {"day": "mon", "slot": "Breakfast", "placeId": "grenier", "note": "Grab sandwiches"}, {"day": "mon", "slot": "Lunch", "placeId": "mamos", "note": ""}, {"day": "mon", "slot": "Dinner", "placeId": "belle", "note": "Early dinner, then pack"}]}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
 <script>
 (function(){
 "use strict";
+var API="__API__";
 var S=JSON.parse(document.getElementById("state").textContent);
-var SEQ={thu:["sherpa","bistrom"],fri:["gondola","corbeau","formedo","renard"],sat:["linga","fermepistes","prelajoux","godille","zeph"],sun:["gondola","torgon","bourri","panthiaz","cheminee"],mon:["grenier","prelajoux","lindarets","mamos","belle"]};
+var SEQ={thu:["sherpa","godille","fiacre"],fri:["gondola","corbeau","escale","formedo","zeph"],sat:["linga","fermepistes","prelajoux","fantasticable","canon","renard"],sun:["gondola","torgon","bourri","panthiaz","sosse","fermelinga"],mon:["grenier","prelajoux","lindarets","mamos","belle"]};
 var DAYS=["thu","fri","sat","sun","mon"];
-var CAT={lift:"Lifts",lunch:"Mountain lunch",dinner:"Dinner",bar:"Après",grocery:"Groceries",bakery:"Bakeries",activity:"Things to do",rental:"Ski rental",custom:"Other"};
+var SLOTS=["Breakfast","Groceries","Lift","Lunch","Après","Dinner","Stop"];
+var CATN={lift:"Lift",lunch:"Mountain lunch",dinner:"Restaurant",bar:"Bar",grocery:"Groceries",bakery:"Bakery",activity:"Activity",rental:"Ski rental",custom:"Place"};
 function $(id){return document.getElementById(id);}
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
 var P={};S.places.forEach(function(p){P[p.id]=p;});
 var D={};S.days.forEach(function(d){D[d.id]=d;});
+var HOME=P.airbnb;
 function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
-function planFor(day,id){for(var i=0;i<S.plan.length;i++){var x=S.plan[i];if(x.day===day&&x.placeId===id)return x;}return null;}
-/* build ordered stops per day, plus any plan items not in SEQ */
-var STOPS={};
-DAYS.forEach(function(day){
-  var ids=(SEQ[day]||[]).slice();
-  S.plan.forEach(function(x){if(x.day===day&&ids.indexOf(x.placeId)<0)ids.push(x.placeId);});
-  STOPS[day]=ids.filter(function(id){return P[id];}).map(function(id,i){var pl=planFor(day,id);return {id:id,n:i+1,slot:pl?pl.slot:(P[id].cat==="lift"?"Lift":"Stop"),note:pl?pl.note:""};});
-});
-var USES={};DAYS.forEach(function(day){STOPS[day].forEach(function(s){(USES[s.id]=USES[s.id]||[]).push({day:day,n:s.n,slot:s.slot});});});
-function mapsUrl(p){if(p.url)return p.url;if(p.cid)return "https://maps.google.com/?cid="+p.cid;if(p.pid)return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(p.name+" Châtel")+"&query_place_id="+p.pid;return "https://www.google.com/maps/search/?api=1&query="+p.lat+","+p.lon;}
-function walkUrl(p){return "https://www.google.com/maps/dir/?api=1&origin=46.26925,6.83526&destination="+p.lat+","+p.lon+"&travelmode=walking";}
+function placeUrl(p){if(p.cid)return "https://maps.google.com/?cid="+p.cid;if(p.pid)return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(p.name+" Châtel")+"&query_place_id="+p.pid;return "";}
+function mapsUrl(it){if(it.url)return it.url;if(it.lat!=null&&it.lat!=="")return "https://www.google.com/maps/search/?api=1&query="+it.lat+","+it.lon;return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(it.name+" Châtel");}
+function walkUrl(it){return "https://www.google.com/maps/dir/?api=1&origin="+HOME.lat+","+HOME.lon+"&destination="+it.lat+","+it.lon+"&travelmode=walking";}
+function hasPos(it){return it.lat!=null&&it.lat!==""&&!isNaN(+it.lat);}
+
+/* ---------- seed (used until the shared sheet has data) ---------- */
+function buildSeed(){
+  var items=[],used={};
+  DAYS.forEach(function(day){(SEQ[day]||[]).forEach(function(pid,i){var p=P[pid];if(!p)return;used[pid]=1;
+    var pl=null;S.plan.forEach(function(x){if(x.day===day&&x.placeId===pid)pl=x;});
+    items.push({id:"s-"+day+"-"+pid,day:day,ord:i,slot:pl?pl.slot:(p.cat==="lift"?"Lift":"Stop"),name:p.name,lab:p.lab||"",cat:p.cat,lat:p.lat,lon:p.lon,note:pl?pl.note:"",info:p.note||"",hours:p.hours||"",url:placeUrl(p),address:"",by:""});});});
+  var k=0;S.places.forEach(function(p){if(used[p.id]||p.cat==="stay")return;
+    items.push({id:"s-idea-"+p.id,day:"",ord:k++,slot:"",name:p.name,lab:p.lab||"",cat:p.cat,lat:p.lat,lon:p.lon,note:"",info:p.note||"",hours:p.hours||"",url:placeUrl(p),address:"",by:""});});
+  return items;
+}
+var ITEMS=buildSeed();
+var LIVE=/^https:\/\/script\.google(usercontent)?\.com\//.test(API);
+var st={day:"all",sel:null,editing:null,adding:null,dragging:false,pending:0};
+var ME="";try{ME=localStorage.getItem("tripName")||"";}catch(e){}
+
+/* ---------- server ---------- */
+function toast(msg,ms){var t=$("toast");t.textContent=msg;t.hidden=false;clearTimeout(toast._t);if(ms)toast._t=setTimeout(function(){t.hidden=true;},ms);}
+function apiGet(params){var q=Object.keys(params).map(function(k){return k+"="+encodeURIComponent(params[k]);}).join("&");
+  return fetch(API+(API.indexOf("?")<0?"?":"&")+q,{method:"GET",redirect:"follow"}).then(function(r){return r.json();});}
+function apiPost(body){st.pending++;toast("Saving…");
+  return fetch(API,{method:"POST",redirect:"follow",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)})
+   .then(function(r){return r.json();}).then(function(res){st.pending--;if(!res.ok)throw new Error(res.error||"Save failed");
+     if(!st.pending){toast("Saved",1500);applyServer(res.items);}return res;})
+   .catch(function(e){st.pending--;toast("Couldn’t save. Check your connection and try again.",5000);throw e;});}
+function applyServer(items){if(!items||!items.length)return;if(st.editing||st.adding||st.dragging)return;ITEMS=items.map(norm);renderAll();}
+function norm(it){it.lat=(it.lat===""||it.lat==null)?null:+it.lat;it.lon=(it.lon===""||it.lon==null)?null:+it.lon;it.ord=+it.ord||0;it.day=String(it.day||"");it.id=String(it.id);return it;}
+function load(){
+  if(!LIVE){$("banner").hidden=false;$("banner").textContent="Read-only preview: editing switches on once the shared Google Sheet is connected.";renderAll();return;}
+  apiGet({action:"list"}).then(function(res){
+    if(!res.ok)throw new Error(res.error);
+    if(!res.items.length){return apiPost({action:"seed",items:ITEMS});}
+    ITEMS=res.items.map(norm);renderAll();
+  }).catch(function(){$("banner").hidden=false;$("banner").textContent="Couldn’t reach the shared plan, so you’re seeing the original version. Edits won’t save until it reconnects.";renderAll();});
+}
+function poll(){if(!LIVE||document.hidden||st.pending)return;apiGet({action:"list"}).then(function(res){if(res.ok)applyServer(res.items);}).catch(function(){});}
+setInterval(poll,40000);document.addEventListener("visibilitychange",function(){if(!document.hidden)poll();});
+
+/* ---------- derived ---------- */
+function dayItems(day){return ITEMS.filter(function(x){return x.day===day;}).sort(function(a,b){return a.ord-b.ord;});}
+function uses(it){var u=[];DAYS.forEach(function(day){dayItems(day).forEach(function(x,i){if(x.id===it.id)u.push({day:day,n:i+1});});});return u;}
+function byId(id){for(var i=0;i<ITEMS.length;i++)if(ITEMS[i].id===id)return ITEMS[i];return null;}
+
+/* ---------- icons ---------- */
 var ICO={home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg>',
  walk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="1.6"/><path d="M10 21l2-6 3 3v3M9 11l3-3 3 3 3 1M12 8l-2 5"/></svg>',
  bus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 18v3M16 18v3"/></svg>',
  van:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11l4 4h3v6H3z"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>',
  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5M9 3h6l-1 6 3 3H7l3-3z"/></svg>',
- unpin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5M9 3h6l-1 6 3 3H7l3-3zM3 3l18 18"/></svg>'};
+ unpin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5M9 3h6l-1 6 3 3H7l3-3zM3 3l18 18"/></svg>',
+ grip:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>'};
 var HOW={thu:"van",fri:"walk",sat:"bus",sun:"walk",mon:"bus"};
-var st={day:"all",sel:null};
 
 /* ---------- pin toggle ---------- */
 function setPinned(on){document.body.classList.toggle("pinned",on);var b=$("pinBtn");b.setAttribute("aria-pressed",String(on));b.innerHTML=(on?ICO.unpin+"Unpin map":ICO.pin+"Pin map");try{localStorage.setItem("pinMap",on?"1":"0");}catch(e){}
@@ -207,57 +281,47 @@ var lineL=L.layerGroup().addTo(map),pinL=L.layerGroup().addTo(map),MK={};
 var ALL=[[46.2010,6.7700],[46.3110,6.8660]];
 map.fitBounds(ALL);
 
-function popup(p){
-  var u=USES[p.id]||[];
-  var h='<div class="pp"><h4>'+esc(p.name)+'</h4>';
-  if(p.cat==="stay")h+='<p>Home base for all three of us.</p>';
+function popup(it){
+  var u=uses(it),h='<div class="pp"><h4>'+esc(it.name)+'</h4>';
   if(u.length)h+='<div class="uses">'+u.map(function(x){return '<span style="--c:var(--'+x.day+')">'+esc(D[x.day].short.split(" ")[0])+' · stop '+x.n+'</span>';}).join("")+'</div>';
-  if(p.note&&p.cat!=="stay")h+='<p>'+esc(p.note)+'</p>';
-  if(p.hours)h+='<p>'+esc(p.hours)+'</p>';
-  h+='<div class="lk"><a href="'+esc(mapsUrl(p))+'" target="_blank" rel="noopener">Google Maps</a>';
-  if(p.cat!=="stay")h+='<a href="'+esc(walkUrl(p))+'" target="_blank" rel="noopener">Walk from Airbnb</a>';
-  if(u.length)h+='<button type="button" data-goto="'+p.id+'">See in itinerary</button>';
+  else h+='<p>Idea, not on a day yet</p>';
+  if(it.note)h+='<p><b style="color:var(--ink)">'+esc(it.note)+'</b></p>';
+  if(it.info)h+='<p>'+esc(it.info)+'</p>';
+  if(it.address)h+='<p>'+esc(it.address)+'</p>';
+  if(it.hours)h+='<p>'+esc(it.hours)+'</p>';
+  if(it.by)h+='<p>Added by '+esc(it.by)+'</p>';
+  h+='<div class="lk"><a href="'+esc(mapsUrl(it))+'" target="_blank" rel="noopener">Open link</a>';
+  if(hasPos(it))h+='<a href="'+esc(walkUrl(it))+'" target="_blank" rel="noopener">Walk from Airbnb</a>';
+  h+='<button type="button" data-goto="'+esc(it.id)+'">'+(u.length?'See in itinerary':'See in ideas')+'</button>';
   return h+'</div></div>';
 }
-function render(){
+function renderMap(){
   lineL.clearLayers();pinL.clearLayers();MK={};
-  var home=P.airbnb;
-  if(st.day==="all"){
-    S.days.forEach(function(d){if(d.route.length<2)return;
-      L.polyline(d.route.map(function(id){return [P[id].lat,P[id].lon];}),{color:css("--"+d.id),weight:3,opacity:.75,dashArray:"6 7",interactive:false}).addTo(lineL);});
-  }else{
-    var pts=[[home.lat,home.lon]].concat(STOPS[st.day].map(function(s){return [P[s.id].lat,P[s.id].lon];}));
-    L.polyline(pts,{color:css("--"+st.day),weight:4,opacity:.9,dashArray:"8 8",interactive:false}).addTo(lineL);
-  }
-  S.places.forEach(function(p){
-    if(p.lat==null)return;
-    var m,u=USES[p.id]||[];
-    if(p.cat==="stay"){
-      m=L.marker([p.lat,p.lon],{icon:L.divIcon({className:"",html:'<div class="homepin">'+ICO.home+'</div>',iconSize:[34,34],iconAnchor:[17,17],popupAnchor:[0,-16]}),zIndexOffset:900,title:"Our Airbnb"});
-      m.bindTooltip("Our Airbnb",{direction:"right",offset:[16,0],className:"tipl",permanent:st.day!=="all"});
-    }else if(st.day!=="all"){
-      var s=null;STOPS[st.day].forEach(function(x){if(x.id===p.id)s=x;});
-      if(!s)return;
-      m=L.marker([p.lat,p.lon],{icon:L.divIcon({className:"",html:'<div class="pn'+(st.sel===p.id?" sel":"")+'" style="--c:var(--'+st.day+')">'+s.n+'</div>',iconSize:[28,28],iconAnchor:[14,14],popupAnchor:[0,-14]}),zIndexOffset:500,title:p.name});
-      m.bindTooltip(p.lab||p.name,{direction:"right",offset:[16,0],className:"tipl",permanent:true});
-    }else if(u.length){
-      var f=u[0];
-      m=L.marker([p.lat,p.lon],{icon:L.divIcon({className:"",html:'<div class="pn'+(u.length>1?" multi":"")+(st.sel===p.id?" sel":"")+'" style="--c:var(--'+f.day+')">'+f.n+'</div>',iconSize:[28,28],iconAnchor:[14,14],popupAnchor:[0,-14]}),zIndexOffset:400,title:p.name});
-      m.bindTooltip((p.lab||p.name)+" · "+D[f.day].short.split(" ")[0],{direction:"top",offset:[0,-14],className:"tipl"});
-    }else{
-      m=L.marker([p.lat,p.lon],{icon:L.divIcon({className:"",html:'<div class="dot'+(p.cat==="lift"?" lift":"")+'"></div>',iconSize:[12,12],iconAnchor:[6,6],popupAnchor:[0,-6]}),title:p.name});
-      m.bindTooltip(p.lab||p.name,{direction:"top",offset:[0,-6],className:"tipl"});
-    }
-    m.bindPopup(popup(p),{maxWidth:280,autoPanPaddingTopLeft:[20,20]});
-    m.addTo(pinL);MK[p.id]=m;
-  });
+  var hm=L.marker([HOME.lat,HOME.lon],{icon:L.divIcon({className:"",html:'<div class="homepin">'+ICO.home+'</div>',iconSize:[34,34],iconAnchor:[17,17],popupAnchor:[0,-16]}),zIndexOffset:900,title:"Our Airbnb"});
+  hm.bindTooltip("Our Airbnb",{direction:"right",offset:[16,0],className:"tipl",permanent:st.day!=="all"});
+  hm.bindPopup('<div class="pp"><h4>Our Airbnb</h4><p>1124 Route de la Béchigne, garden-level apartment 2</p></div>');hm.addTo(pinL);
+  DAYS.forEach(function(day){if(st.day!=="all"&&st.day!==day)return;
+    var pts=[[HOME.lat,HOME.lon]].concat(dayItems(day).filter(hasPos).map(function(x){return [x.lat,x.lon];}));
+    if(pts.length>1)L.polyline(pts,{color:css("--"+day),weight:st.day===day?4:3,opacity:st.day===day?.9:.55,dashArray:"8 8",interactive:false}).addTo(lineL);});
+  var placed={};
+  DAYS.forEach(function(day){dayItems(day).forEach(function(it,i){
+    if(!hasPos(it))return;if(st.day!=="all"&&st.day!==day)return;
+    var key=it.lat.toFixed(5)+","+it.lon.toFixed(5)+"|"+it.name;if(st.day==="all"&&placed[key])return;placed[key]=1;
+    var multi=st.day==="all"&&ITEMS.some(function(o){return o!==it&&o.day&&o.name===it.name&&o.day!==day;});
+    var m=L.marker([it.lat,it.lon],{icon:L.divIcon({className:"",html:'<div class="pn'+(multi?" multi":"")+(st.sel===it.id?" sel":"")+'" style="--c:var(--'+day+')">'+(i+1)+'</div>',iconSize:[28,28],iconAnchor:[14,14],popupAnchor:[0,-14]}),zIndexOffset:500,title:it.name});
+    if(st.day!=="all")m.bindTooltip(it.lab||it.name,{direction:"right",offset:[16,0],className:"tipl",permanent:true});
+    else m.bindTooltip((it.lab||it.name)+" · "+D[day].short.split(" ")[0],{direction:"top",offset:[0,-14],className:"tipl"});
+    m.bindPopup(function(){return popup(it);},{maxWidth:280});m.addTo(pinL);MK[it.id]=m;});});
+  if(st.day==="all")dayItems("").forEach(function(it){if(!hasPos(it))return;
+    var m=L.marker([it.lat,it.lon],{icon:L.divIcon({className:"",html:'<div class="dot'+(it.cat==="lift"?" lift":"")+'"></div>',iconSize:[12,12],iconAnchor:[6,6],popupAnchor:[0,-6]}),title:it.name});
+    m.bindTooltip(it.lab||it.name,{direction:"top",offset:[0,-6],className:"tipl"});m.bindPopup(function(){return popup(it);},{maxWidth:280});m.addTo(pinL);MK[it.id]=m;});
 }
 function fit(){
   if(st.day==="all"){map.fitBounds(ALL);return;}
-  var pts=[[P.airbnb.lat,P.airbnb.lon]].concat(STOPS[st.day].map(function(s){return [P[s.id].lat,P[s.id].lon];}));
+  var pts=[[HOME.lat,HOME.lon]].concat(dayItems(st.day).filter(hasPos).map(function(x){return [x.lat,x.lon];}));
   map.fitBounds(pts,{padding:[50,50],maxZoom:16});
 }
-map.on("popupopen",function(e){var b=e.popup.getElement().querySelector("[data-goto]");if(b)b.addEventListener("click",function(){gotoItin(b.getAttribute("data-goto"));});});
+map.on("popupopen",function(e){var b=e.popup.getElement().querySelector("[data-goto]");if(b)b.addEventListener("click",function(){gotoItem(b.getAttribute("data-goto"));});});
 
 /* ---------- day nav ---------- */
 function renderNav(){
@@ -267,52 +331,154 @@ function renderNav(){
   $("dayNav").querySelectorAll(".sign").forEach(function(b){b.addEventListener("click",function(){selectDay(b.getAttribute("data-d"),true);});});
 }
 function selectDay(d,scroll){
-  st.day=d;st.sel=null;renderNav();render();fit();
-  $("hint").textContent=d==="all"?"Numbered pins are itinerary stops. Tap a stop below to find it on the map, or tap a day sign to show only that day.":"Showing "+D[d].label+". Tap “Whole trip” to see every place again.";
+  st.day=d;st.sel=null;renderNav();renderMap();fit();
   if(scroll){var el=d==="all"?$("days"):$("day-"+d);if(el)el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});}
 }
 
-/* ---------- itinerary ---------- */
+/* ---------- itinerary rows ---------- */
+function rowHtml(it,n,day){
+  var idea=!day;
+  return '<li class="stop'+(idea?' idea':'')+'" id="item-'+esc(it.id)+'" data-id="'+esc(it.id)+'">'+
+    (LIVE?'<button class="grip" type="button" aria-label="Drag to move '+esc(it.name)+'">'+ICO.grip+'</button>':'<span></span>')+
+    '<div><div style="display:grid;grid-template-columns:1fr auto;align-items:start">'+
+    '<button class="row" type="button" data-act="map"><span class="num">'+(idea?'':n)+'</span><span>'+
+    (it.slot&&!idea?'<span class="slot">'+esc(String(it.slot).toUpperCase())+'</span>':'')+
+    '<span class="nm">'+esc(it.name)+'</span>'+
+    (it.note?'<span class="nt" style="color:var(--ink);font-weight:500">'+esc(it.note)+'</span>':'')+(it.info?'<span class="nt">'+esc(String(it.info))+'</span>':'')+
+    (hasPos(it)?'':'<span class="nt">No map location yet</span>')+'</span><span></span></button>'+
+    '<div class="acts"><span data-act="map">Map</span>'+(LIVE?'<span data-act="edit">Edit</span>':'')+'</div></div>'+
+    (st.editing===it.id?editorHtml(it):'')+'</div></li>';
+}
+function slotOptions(cur){return SLOTS.map(function(s){return '<option'+(s===cur?' selected':'')+'>'+s+'</option>';}).join("");}
+function dayOptions(cur){return '<option value=""'+(cur===""?' selected':'')+'>Ideas (no day)</option>'+DAYS.map(function(d){return '<option value="'+d+'"'+(d===cur?' selected':'')+'>'+esc(D[d].label)+'</option>';}).join("");}
+function editorHtml(it){
+  return '<form class="editor" data-edit="'+esc(it.id)+'">'+
+    '<label>Name<input name="name" maxlength="120" required value="'+esc(it.name)+'"></label>'+
+    '<div class="row2"><label>Day<select name="day">'+dayOptions(it.day)+'</select></label><label>When<select name="slot">'+slotOptions(it.slot||"Stop")+'</select></label></div>'+
+    '<label>Note for the group<input name="note" maxlength="200" value="'+esc(it.note)+'" placeholder="Book ahead, bring cash…"></label>'+
+    '<label>Link<input name="url" type="url" maxlength="600" value="'+esc(it.url)+'" placeholder="https://"></label>'+
+    '<div class="btns"><button class="btn go" type="submit">Save</button><button class="btn" type="button" data-cancel>Cancel</button><button class="btn del" type="button" data-delete>Delete</button></div></form>';
+}
+function addHtml(day){
+  var a=st.adding;
+  var h='<div class="editor" data-addform="'+day+'"><label>Paste a link (Google Maps, restaurant website, TripAdvisor…)<span class="lookup"><input name="link" type="url" placeholder="https://maps.app.goo.gl/…" value="'+esc(a.link||"")+'"><button class="btn go" type="button" data-lookup>Look up</button></span></label>';
+  if(a.status)h+='<div class="msg'+(a.err?' err':'')+'">'+esc(a.status)+'</div>';
+  if(a.place){var p=a.place;
+    h+='<div class="preview"><b>'+esc(p.name||"(no name found)")+'</b>'+(p.address?'<br>'+esc(p.address):'')+(hasPos(p)?'':'<br><span class="msg err">No map location found; it’ll be listed without a pin.</span>')+'</div>'+
+      '<label>Name<input name="name" maxlength="120" value="'+esc(p.name)+'"></label>'+
+      '<div class="row2"><label>Day<select name="day">'+dayOptions(day)+'</select></label><label>When<select name="slot">'+slotOptions(guessSlot(p.cat))+'</select></label></div>'+
+      '<label>Note for the group<input name="note" maxlength="200" placeholder="Optional"></label>';}
+  h+='<div class="btns">'+(a.place?'<button class="btn go" type="button" data-addsave>Add</button>':'<button class="btn" type="button" data-manual>Add without a link</button>')+'<button class="btn" type="button" data-addcancel>Cancel</button></div></div>';
+  return h;
+}
+function guessSlot(cat){return {lunch:"Lunch",dinner:"Dinner",bar:"Après",grocery:"Groceries",bakery:"Breakfast",lift:"Lift",activity:"Après"}[cat]||"Stop";}
+
 function renderDays(){
   var h="";
-  DAYS.forEach(function(id,i){var d=D[id];
+  DAYS.forEach(function(id){var d=D[id];
     h+='<article class="day '+id+'" id="day-'+id+'" style="--c:var(--'+id+')"><div class="plaque"><span class="dn">'+esc(d.short.split(" ")[1])+'</span><h2>'+esc(d.title)+'<small>'+esc(d.label)+'</small></h2>'+(d.pass?'<span class="pass">'+esc(d.pass.toUpperCase())+'</span>':'')+'</div><div class="body">';
     h+='<div class="get">'+ICO[HOW[id]]+'<div><b>Getting to the lifts</b>'+esc(d.getThere)+'</div></div>';
-    h+='<ol class="stops">'+STOPS[id].map(function(s){var p=P[s.id];
-      return '<li class="stop" id="stop-'+id+'-'+s.id+'"><button type="button" data-day="'+id+'" data-id="'+s.id+'"><span class="num">'+s.n+'</span><span><span class="slot">'+esc(s.slot.toUpperCase())+'</span><span class="nm">'+esc(p.name)+'</span>'+(s.note?'<span class="nt">'+esc(s.note)+'</span>':'')+'</span><span class="go">Map</span></button></li>';}).join("")+'</ol>';
+    h+='<ol class="stops" data-day="'+id+'">'+dayItems(id).map(function(it,i){return rowHtml(it,i+1,id);}).join("")+'</ol>';
+    if(LIVE)h+=(st.adding&&st.adding.day===id)?addHtml(id):'<button class="addbtn" type="button" data-add="'+id+'">+ Add a stop from a link</button>';
     h+='<details class="more"><summary>Ski plan details</summary><ul class="plan">'+d.plan.map(function(t){return "<li>"+esc(t)+"</li>";}).join("")+'</ul></details>';
     if(d.cutoff)h+='<div class="warn">'+esc(d.cutoff)+'</div>';
     h+='</div></article>';});
   $("days").innerHTML=h;
-  $("days").querySelectorAll(".stop button").forEach(function(b){b.addEventListener("click",function(){focusStop(b.getAttribute("data-day"),b.getAttribute("data-id"));});});
+  $("ideas").innerHTML=dayItems("").map(function(it){return rowHtml(it,0,"");}).join("");
+  var ib=document.querySelector('[data-add=""]');
+  if(ib){ib.hidden=!LIVE||(st.adding&&st.adding.day==="");}
+  $("add-ideas").innerHTML=(LIVE&&st.adding&&st.adding.day==="")?addHtml(""):"";
+  wireLists();
 }
-function focusStop(day,id){
-  var p=P[id];if(!p)return;
-  if(st.day!=="all"&&st.day!==day)selectDay(day,false);
-  st.sel=id;render();
+function renderAll(){renderNav();renderDays();renderMap();}
+
+/* ---------- interactions ---------- */
+function wireLists(){
+  document.querySelectorAll(".stops").forEach(function(ol){
+    if(ol._sortable){ol._sortable.destroy();ol._sortable=null;}
+    if(LIVE&&window.Sortable)ol._sortable=Sortable.create(ol,{group:"trip",handle:".grip",animation:150,ghostClass:"sortable-ghost",chosenClass:"sortable-chosen",
+      onStart:function(){st.dragging=true;},onEnd:function(){st.dragging=false;saveOrder();}});
+  });
+}
+function saveOrder(){
+  var changes=[];
+  document.querySelectorAll(".stops").forEach(function(ol){var day=ol.getAttribute("data-day")||"";
+    Array.prototype.forEach.call(ol.children,function(li,i){var it=byId(li.getAttribute("data-id"));if(!it)return;
+      if(it.day!==day||it.ord!==i){if(it.day!==day&&day&&(!it.slot||it.slot===""))it.slot=guessSlot(it.cat);it.day=day;it.ord=i;changes.push({id:it.id,day:day,ord:i});}});});
+  renderAll();
+  if(changes.length)apiPost({action:"order",items:changes}).catch(function(){});
+}
+function needName(cb){
+  if(ME)return cb();
+  var name=(window.prompt("Who’s editing? (Joe, Tom or Mike)")||"").trim().slice(0,30);
+  if(!name)return;ME=name;try{localStorage.setItem("tripName",ME);}catch(e){}cb();
+}
+document.addEventListener("click",function(e){
+  var t=e.target.closest("[data-act],[data-add],[data-cancel],[data-delete],[data-lookup],[data-addsave],[data-addcancel],[data-manual]");if(!t)return;
+  var li=t.closest(".stop"),id=li&&li.getAttribute("data-id");
+  if(t.hasAttribute("data-act")){
+    if(t.getAttribute("data-act")==="map")focusItem(id);
+    else if(t.getAttribute("data-act")==="edit"){st.editing=st.editing===id?null:id;st.adding=null;renderDays();}
+  }else if(t.hasAttribute("data-add")){needName(function(){st.adding={day:t.getAttribute("data-add")};st.editing=null;renderDays();
+      var inp=document.querySelector('[data-addform] input[name=link]');if(inp)inp.focus();});}
+  else if(t.hasAttribute("data-cancel")){st.editing=null;renderDays();}
+  else if(t.hasAttribute("data-addcancel")){st.adding=null;renderDays();}
+  else if(t.hasAttribute("data-delete")){var it=byId(id);if(it&&confirm("Delete “"+it.name+"” for everyone?")){ITEMS=ITEMS.filter(function(x){return x.id!==id;});st.editing=null;renderAll();apiPost({action:"delete",id:id}).catch(function(){});}}
+  else if(t.hasAttribute("data-lookup")){lookup();}
+  else if(t.hasAttribute("data-manual")){st.adding.place={name:"",lat:null,lon:null,cat:"custom",url:""};st.adding.status="";renderDays();}
+  else if(t.hasAttribute("data-addsave")){addSave();}
+});
+document.addEventListener("keydown",function(e){if(e.key==="Enter"&&e.target.name==="link"){e.preventDefault();lookup();}});
+document.addEventListener("submit",function(e){var f=e.target;if(!f.hasAttribute("data-edit"))return;e.preventDefault();
+  needName(function(){var it=byId(f.getAttribute("data-edit"));if(!it)return;var E=f.elements;
+    var newDay=E.namedItem("day").value;
+    if(newDay!==it.day){it.ord=dayItems(newDay).length;}
+    it.name=E.namedItem("name").value.trim()||it.name;it.day=newDay;it.slot=E.namedItem("slot").value;it.note=E.namedItem("note").value.trim();
+    var u=E.namedItem("url").value.trim();it.url=/^https?:\/\//i.test(u)?u:"";it.by=it.by||ME;
+    st.editing=null;renderAll();apiPost({action:"upsert",item:it}).catch(function(){});});
+});
+function addFormEl(){return document.querySelector("[data-addform]");}
+function lookup(){
+  var f=addFormEl();if(!f)return;var link=f.querySelector("input[name=link]").value.trim();
+  st.adding.link=link;
+  if(!/^https?:\/\//i.test(link)){st.adding.status="Paste a full link that starts with https://";st.adding.err=true;renderDays();return;}
+  st.adding.status="Looking up the link…";st.adding.err=false;st.adding.place=null;renderDays();
+  apiGet({action:"resolve",url:link}).then(function(res){
+    if(!st.adding)return;
+    if(!res.ok)throw new Error(res.error);
+    st.adding.place=res.place;st.adding.status=hasPos(res.place)?"Found it. Check the details, then add.":"Found the page but not a location.";renderDays();
+  }).catch(function(err){if(!st.adding)return;st.adding.status="Couldn’t read that link. Try a Google Maps link, or add it without one.";st.adding.err=true;renderDays();});
+}
+function addSave(){
+  var f=addFormEl(),a=st.adding;if(!f||!a||!a.place)return;var E=f.querySelectorAll("input,select"),v={};
+  Array.prototype.forEach.call(E,function(x){v[x.name]=x.value;});
+  if(!(v.name||"").trim()){alert("Give it a name first.");return;}
+  var day=v.day||"";
+  var it={id:"u"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),day:day,ord:dayItems(day).length,slot:day?v.slot:"",
+    name:v.name.trim(),lab:"",cat:a.place.cat||"custom",lat:a.place.lat,lon:a.place.lon,note:(v.note||"").trim(),info:a.place.info||"",
+    hours:a.place.hours||"",url:a.place.url||a.link||"",address:a.place.address||"",by:ME};
+  ITEMS.push(norm(it));st.adding=null;renderAll();
+  apiPost({action:"upsert",item:it}).then(function(){focusItem(it.id);}).catch(function(){});
+}
+function focusItem(id){
+  var it=byId(id);if(!it)return;
+  if(!hasPos(it)){toast("No map location for this one yet",2500);return;}
+  if(st.day!=="all"&&it.day!==st.day){st.day=it.day||"all";renderNav();}
+  st.sel=id;renderMap();
   if(!document.body.classList.contains("pinned"))$("mapblock").scrollIntoView({behavior:"smooth"});
-  map.setView([p.lat,p.lon],Math.max(map.getZoom(),15),{animate:true});
+  map.setView([it.lat,it.lon],Math.max(map.getZoom(),15),{animate:true});
   setTimeout(function(){if(MK[id])MK[id].openPopup();},350);
 }
-function gotoItin(id){var u=(USES[id]||[])[0];if(!u)return;var el=$("stop-"+(st.day!=="all"&&(USES[id]||[]).some(function(x){return x.day===st.day;})?st.day:u.day)+"-"+id);if(!el)return;map.closePopup();
+function gotoItem(id){var el=$("item-"+id);if(!el)return;map.closePopup();
   el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("flash");setTimeout(function(){el.classList.remove("flash");},1600);}
-
-/* ---------- other places ---------- */
-function renderOthers(){
-  var h="";Object.keys(CAT).forEach(function(k){
-    var list=S.places.filter(function(p){return p.cat!=="stay"&&(CAT[p.cat]?p.cat:"custom")===k&&!USES[p.id];});
-    if(!list.length)return;h+='<h3>'+esc(CAT[k].toUpperCase())+'</h3>';
-    list.forEach(function(p){h+='<button type="button" data-id="'+p.id+'"><span class="d"></span><span>'+esc(p.name)+'</span></button>';});});
-  $("others").innerHTML=h;
-  $("others").querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){var id=b.getAttribute("data-id"),p=P[id];if(st.day!=="all")selectDay("all",false);
-    if(!document.body.classList.contains("pinned"))$("mapblock").scrollIntoView({behavior:"smooth"});map.setView([p.lat,p.lon],Math.max(map.getZoom(),15));setTimeout(function(){if(MK[id])MK[id].openPopup();},350);});});
-}
 
 $("pinBtn").addEventListener("click",function(){setPinned(!document.body.classList.contains("pinned"));});
 var saved=null;try{saved=localStorage.getItem("pinMap");}catch(e){}
-renderNav();renderDays();renderOthers();render();setPinned(saved!=="0");setTimeout(function(){map.invalidateSize();fit();},250);
+renderAll();setPinned(saved!=="0");setTimeout(function(){map.invalidateSize();fit();},250);
 window.addEventListener("resize",function(){map.invalidateSize();measure();});
+load();
 })();
+
 </script>
 </body>
 </html>
