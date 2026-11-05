@@ -146,6 +146,8 @@ footer{color:var(--muted);font-size:13px;max-width:860px;margin:0 auto;padding:0
 .toast[hidden]{display:none}
 .banner{background:var(--soft);border-radius:8px;padding:8px 12px;font-size:14px;margin:0 0 14px}
 .banner[hidden]{display:none}
+.stop .tip{display:block;font-size:14px;color:var(--ink);margin:2px 0}
+.intro{margin:0 0 12px;font-size:15px}
 .stop .hr{display:block;font-size:13px;font-weight:600;color:var(--fri);margin:1px 0 2px}
 .stop .hr.closed{color:var(--sun)}
 .stop .acts a.bk{font-size:13px;font-weight:700;color:var(--sun);text-decoration:none;white-space:nowrap}
@@ -222,6 +224,19 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){retur
 var P={};S.places.forEach(function(p){P[p.id]=p;});
 var D={};S.days.forEach(function(d){D[d.id]=d;});
 var HOME=P.airbnb;
+var TIP={
+"fri-gondola":"Ride up, then warm-up laps on the Morclan and Conche chairs.",
+"fri-corbeau":"Take the Chalet Neuf drag over the border into Morgins’ Corbeau sector.",
+"sat-linga":"Steepest runs on our pass. Saturday is chalet changeover day, so it’s usually quiet up here.",
+"sat-prelajoux":"Ski across from Linga for afternoon laps on Pierre Longue and Rochassons.",
+"sun-torgon":"From the top of Super-Châtel, the Tour de Don drag drops you into Torgon.",
+"sun-panthiaz":"From Torgon, the Djeu des Têtes and Conche 2000 drags lead over to La Chapelle’s Panthiaz gondola.",
+"mon-grenier":"Grab sandwiches, then Line 1 to Pré-la-Joux.",
+"mon-prelajoux":"Be here by 8:45 AM. Pierre Longue chair, then Rochassons.",
+"mon-lindarets":"Ski down from Rochassons to Les Lindarets, then ride this chair up into Avoriaz. Coming home: back to Les Lindarets and up the Chaux Fleurie chair."
+};
+var DAYINTRO={thu:"Meet at a coffee shop outside baggage claim in Geneva arrivals: Tom lands at 1:25, Mike at 1:50, Joe at 2:40 PM."};
+function tipLine(it){var m=/^s-(thu|fri|sat|sun|mon)-(.+)$/.exec(it.id);var x=m&&TIP[m[1]+"-"+m[2]];return x?'<span class="tip">⛷ '+esc(x)+'</span>':"";}
 var HRS=(function(){
 function all(x){return {thu:x,fri:x,sat:x,sun:x,mon:x};}
 function on(days,x,base){var o=base||{};days.split(",").forEach(function(d){o[d]=x;});return o;}
@@ -409,7 +424,7 @@ function rowHtml(it,n,day){
     '<div><div style="display:grid;grid-template-columns:1fr auto;align-items:start">'+
     '<button class="row" type="button" data-act="map"><span class="num">'+(idea?'':n)+'</span><span>'+
     (it.slot&&!idea?'<span class="slot">'+esc(String(it.slot).toUpperCase())+'</span>':'')+
-    '<span class="nm">'+esc(it.name)+'</span>'+hoursLine(it,day)+
+    '<span class="nm">'+esc(it.name)+'</span>'+hoursLine(it,day)+tipLine(it)+
     (it.note?'<span class="nt" style="color:var(--ink);font-weight:500">'+esc(it.note)+'</span>':'')+(it.info?'<span class="nt">'+esc(String(it.info))+'</span>':'')+
     (hasPos(it)?'':'<span class="nt">No map location yet</span>')+'</span><span></span></button>'+
     '<div class="acts"><span data-act="map">Map</span>'+(LIVE?'<span data-act="edit">Edit</span>':'')+bookLink(it,"bk")+'</div></div>'+
@@ -443,10 +458,10 @@ function renderDays(){
   var h="";
   DAYS.forEach(function(id){var d=D[id];
     h+='<article class="day '+id+'" id="day-'+id+'" style="--c:var(--'+id+')"><div class="plaque"><span class="dn">'+esc(d.short.split(" ")[1])+'</span><h2>'+esc(d.title)+'<small>'+esc(d.label)+'</small></h2>'+(d.pass?'<span class="pass">'+esc(d.pass.toUpperCase())+'</span>':'')+'</div><div class="body">';
+    if(DAYINTRO[id])h+='<p class="intro">'+esc(DAYINTRO[id])+'</p>';
     h+='<div class="get">'+ICO[HOW[id]]+'<div><b>Getting to the lifts</b>'+esc(d.getThere)+'</div></div>';
     h+='<ol class="stops" data-day="'+id+'">'+dayItems(id).map(function(it,i){return rowHtml(it,i+1,id);}).join("")+'</ol>';
     if(LIVE)h+=(st.adding&&st.adding.day===id)?addHtml(id):'<button class="addbtn" type="button" data-add="'+id+'">+ Add a stop from a link</button>';
-    h+='<details class="more"><summary>Ski plan details</summary><ul class="plan">'+d.plan.map(function(t){return "<li>"+esc(t)+"</li>";}).join("")+'</ul></details>';
     if(d.cutoff)h+='<div class="warn">'+esc(d.cutoff)+'</div>';
     h+='</div></article>';});
   $("days").innerHTML=h;
