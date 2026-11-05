@@ -147,6 +147,18 @@ footer{color:var(--muted);font-size:13px;max-width:860px;margin:0 auto;padding:0
 .banner{background:var(--soft);border-radius:8px;padding:8px 12px;font-size:14px;margin:0 0 14px}
 .banner[hidden]{display:none}
 
+@media (min-width:1000px){
+  body{display:grid;grid-template-columns:minmax(440px,52%) minmax(0,1fr);align-items:start}
+  .mapblock,body.pinned .mapblock{position:sticky;top:0;height:100vh;height:100dvh;grid-column:1;grid-row:1/span 4;display:flex;flex-direction:column;border-bottom:0;border-right:1px solid var(--line)}
+  #map,body.pinned #map{flex:1;height:auto;max-height:none;min-height:0}
+  .bar,.daynav{max-width:none;margin:0}
+  .daynav{flex-wrap:wrap;padding:10px 16px 12px}
+  .pinbtn{display:none}
+  main,footer{grid-column:2;width:100%;max-width:780px;margin:0}
+  main{padding:20px 28px 40px}
+  footer{padding:0 28px 40px}
+}
+
 </style>
 </head>
 <body class="pinned">
@@ -268,7 +280,7 @@ var HOW={thu:"van",fri:"walk",sat:"bus",sun:"walk",mon:"bus"};
 /* ---------- pin toggle ---------- */
 function setPinned(on){document.body.classList.toggle("pinned",on);var b=$("pinBtn");b.setAttribute("aria-pressed",String(on));b.innerHTML=(on?ICO.unpin+"Unpin map":ICO.pin+"Pin map");try{localStorage.setItem("pinMap",on?"1":"0");}catch(e){}
   setTimeout(function(){map.invalidateSize();measure();},60);}
-function measure(){var h=document.body.classList.contains("pinned")?$("mapblock").offsetHeight:0;document.documentElement.style.setProperty("--stick",h+"px");}
+function measure(){var h=(document.body.classList.contains("pinned")&&!matchMedia("(min-width:1000px)").matches)?$("mapblock").offsetHeight:0;document.documentElement.style.setProperty("--stick",h+"px");}
 
 /* ---------- map ---------- */
 var map=L.map("map",{scrollWheelZoom:false,zoomSnap:.5});
