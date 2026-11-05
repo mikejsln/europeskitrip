@@ -146,6 +146,8 @@ footer{color:var(--muted);font-size:13px;max-width:860px;margin:0 auto;padding:0
 .toast[hidden]{display:none}
 .banner{background:var(--soft);border-radius:8px;padding:8px 12px;font-size:14px;margin:0 0 14px}
 .banner[hidden]{display:none}
+.stop .hr{display:block;font-size:13px;font-weight:600;color:var(--fri);margin:1px 0 2px}
+.stop .hr.closed{color:var(--sun)}
 .stop .acts a.bk{font-size:13px;font-weight:700;color:var(--sun);text-decoration:none;white-space:nowrap}
 
 @media (min-width:1000px){
@@ -220,6 +222,44 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){retur
 var P={};S.places.forEach(function(p){P[p.id]=p;});
 var D={};S.days.forEach(function(d){D[d.id]=d;});
 var HOME=P.airbnb;
+var HRS=(function(){
+function all(x){return {thu:x,fri:x,sat:x,sun:x,mon:x};}
+function on(days,x,base){var o=base||{};days.split(",").forEach(function(d){o[d]=x;});return o;}
+var N5=[["9 AM","5 PM"]],SPLIT=[["7 AM","12:30 PM"],["3 PM","7 PM"]],C=[];
+return {
+sherpa:all([["7 AM","12:30 PM"],["3 PM","7:15 PM"]]),
+epicurie:on("sun,mon",C,on("thu,fri,sat",[["9 AM","12:30 PM"],["3 PM","7 PM"]])),
+sosse:on("thu,fri,mon",C,on("sat,sun",[["10 AM","6 PM"]])),
+fermelinga:on("thu,sat,mon",C,on("fri,sun",[["6 PM","7 PM"]])),
+intermarche:on("sun",[["9 AM","12 PM"]],on("thu,fri,sat,mon",[["8:30 AM","7:15 PM"]])),
+grenier:all([["5:30 AM","8 PM"]]),grillet:all(SPLIT),
+bistrom:on("sat,sun",C,on("fri",[["10 AM","2:30 PM"]],on("thu,mon",[["10 AM","2:30 PM"],["6 PM","10 PM"]]))),
+renard:{thu:[["12 PM","2 PM"],["7 PM","9 PM"]],fri:[["12 PM","2 PM"],["7 PM","9 PM"]],sat:[["7 PM","9 PM"]],sun:[["12 PM","2 PM"]],mon:C},
+zeph:all([["10 AM","2:30 PM"],["5:30 PM","10 PM"]]),
+cheminee:on("mon",[["10:30 AM","2:30 PM"],["7 PM","10 PM"]],on("thu,fri,sat,sun",[["10:30 AM","2 PM"],["7 PM","9 PM"]])),
+belle:all([["11:30 AM","11 PM"]]),corbeau:all([["10 AM","6 PM"]]),
+fermepistes:all(N5),crepy:all(N5),mamos:all(N5),petitlindaret:all(N5),
+bourri:on("thu,mon",C,on("fri,sat,sun",[["9:30 AM","6 PM"]])),
+formedo:on("mon",C,on("thu,fri,sat,sun",[["12 PM","7 PM"]])),
+richard:on("thu",C,on("fri,sat,sun,mon",[["9 AM","12:30 PM"],["3 PM","7 PM"]])),
+skimiumlinga:all([["9 AM","7 PM"]]),
+fiacre:{thu:[["6:30 PM","10 PM"]],fri:[["11:30 AM","2:15 PM"],["6:30 PM","10 PM"]],sat:[["11:30 AM","2:15 PM"],["6:30 PM","10 PM"]],sun:[["11:30 AM","2:15 PM"],["6:30 PM","10 PM"]],mon:C},
+escale:all([["9:30 AM","5 PM"]]),
+canon:on("sun",[["9:30 AM","12:30 PM"]],on("thu,fri,sat,mon",[["9:30 AM","12:30 PM"],["4:30 PM","9 PM"]])),
+fantasticable:on("thu,fri,sat,sun",[["12 PM","4 PM"]]),
+panoramique:all([["10:30 AM","4 PM"]]),
+passemontagne:on("sun",[["10 AM","4:30 PM"]],on("thu,fri,sat,mon",[["9:30 AM","4:45 PM"]]))
+};})();
+var HRSNAME={};Object.keys(HRS).forEach(function(k){var p=P[k];if(p)HRSNAME[p.name.toLowerCase()]=HRS[k];});
+var DAYNAME={thu:"Thursday",fri:"Friday",sat:"Saturday",sun:"Sunday",mon:"Monday"};
+function hoursLine(it,day){
+  var m=/^s-(?:idea|thu|fri|sat|sun|mon)-(.+)$/.exec(it.id),h=(m&&HRS[m[1]])||HRSNAME[String(it.name||"").toLowerCase()];
+  if(h&&day&&h[day]){var a=h[day];
+    if(!a.length)return '<span class="hr closed">Closed on '+DAYNAME[day]+'</span>';
+    return '<span class="hr">Open '+a.map(function(x){return x[0]+" to "+x[1];}).join(" and ")+'</span>';}
+  if(it.hours)return '<span class="hr">'+esc(it.hours)+'</span>';
+  return "";
+}
 var BOOK={
 fiacre:{tel:"+33450733046"},zeph:{tel:"+33450732415"},renard:{tel:"+33450732620"},belle:{tel:"+33642108491"},
 bistrom:{tel:"+33450732083"},cheminee:{tel:"+33450173625"},escale:{tel:"+33450736438"},crepy:{tel:"+33450733119"},
@@ -369,7 +409,7 @@ function rowHtml(it,n,day){
     '<div><div style="display:grid;grid-template-columns:1fr auto;align-items:start">'+
     '<button class="row" type="button" data-act="map"><span class="num">'+(idea?'':n)+'</span><span>'+
     (it.slot&&!idea?'<span class="slot">'+esc(String(it.slot).toUpperCase())+'</span>':'')+
-    '<span class="nm">'+esc(it.name)+'</span>'+
+    '<span class="nm">'+esc(it.name)+'</span>'+hoursLine(it,day)+
     (it.note?'<span class="nt" style="color:var(--ink);font-weight:500">'+esc(it.note)+'</span>':'')+(it.info?'<span class="nt">'+esc(String(it.info))+'</span>':'')+
     (hasPos(it)?'':'<span class="nt">No map location yet</span>')+'</span><span></span></button>'+
     '<div class="acts"><span data-act="map">Map</span>'+(LIVE?'<span data-act="edit">Edit</span>':'')+bookLink(it,"bk")+'</div></div>'+
